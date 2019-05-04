@@ -1,39 +1,39 @@
 <template>
     <div class="events-table">
         <div class="table-head flex space-evenly">
-            <div class="table-title table-item">
+            <div class="table-title event-table-cell">
                 סטטוס
             </div>
-            <div class="table-title table-item">
+            <div class="table-title event-table-cell">
                 רשומים/קהל רחב
             </div>
-            <div class="table-title table-item" @click="sortByDate(filteredEventsArr, dateSortDir)">
+            <div class="table-title event-table-cell" @click="sortByDate(filteredEventsArr, dateSortDir)">
                 תאריך
             </div>
-            <div class="table-title table-item">
+            <div class="table-title event-table-cell">
                 מיקום
             </div>
-            <div class="table-title table-item event-name">
+            <div class="table-title event-table-cell event-name">
                 שם האירוע
             </div>
         </div>
         <div class="table-body" v-if="isData">
-            <div class="event-item flex" v-for="event of filteredEventsArr" :key="event.key" @click="navigateToEvent(event.key)">
-                <div class="table-item">
+            <div class="event-table-row flex" v-for="event of filteredEventsArr" :key="event.key" @click="navigateToEvent(event.key)">
+                <div class="event-table-cell event-status" :class="{ full: handleVolunteersStatus(event) === eventConfig.full, empty: handleVolunteersStatus(event) === eventConfig.notFull }">
                     {{ handleVolunteersStatus(event) }}
                 </div>
-                <div class="table-item">
+                <div class="event-table-cell">
                     {{ handleEventType(event.type) }}
                 </div>
-                <div class="table-item">
+                <div class="event-table-cell">
                     {{ parseDate(event.time.date) }}
                 </div>
-                <div class="table-item">
+                <div class="event-table-cell">
                     <div class="location" v-for="(location, index) of event.locations" :key="index">
                         - {{ location.city }}
                     </div>
                 </div>
-                <div class="table-item event-name" :title="event.title">
+                <div class="event-table-cell event-name" :title="event.title">
                     {{ handleEventName(event.title) }}
                     <!-- {{ event.title }} -->
                 </div>
@@ -73,9 +73,17 @@ export default {
             }
         },
         handleVolunteersStatus(event){
-            if(event.personal && event.personal.length >= event.volunteers.max){
-                return eventConfig.full;
+            if(event.personal){
+                if( event.personal.length >= event.volunteers.max){
+                    return eventConfig.full;
+                }
+                if(event.length === 0){
+                    return eventConfig.notFull;
+                }
+                // if there are personal but not full or empty,
+                return `התנדבו ${event.personal.length}, חסרים ${event.volunteers.max - event.personal.length}`
             }
+            // if event.personal doesn't exists or is empty, return not full
             return eventConfig.notFull;
         },
         handleEventType(eventType){
@@ -91,7 +99,7 @@ export default {
         },
         handleEventName(eventName){
             // this size has been tested and checked to be the best.
-            const max = 44;
+            const max = 35;
             if(eventName.length > max){
                 return eventName.slice(0, max) + '...'
             }
@@ -128,6 +136,11 @@ export default {
 
 <style lang="scss" scoped>
 @import '@/assets/scss/style.scss';
+$table-mragin: 20px;
+
+    .events-table {
+        font-size: $text-font-size;
+    }
 
     .table-body {
         max-height: calc(100vh - 165px);
@@ -135,37 +148,52 @@ export default {
     }
 
     .table-head {
-        background-color: rgb(235, 235, 235);
+        background-color:#eeeeee;
         padding: 10px 0;
-        padding-right: 4px;
+        padding-right: 4px + $table-mragin; // scroll size 4px + table items margin 20px
+        padding-left: $table-mragin;
     }
 
     .table-title {
         border-left: 1px solid $border-color;
     }
 
-    .table-item {
+    .event-table-cell {
         direction: rtl;
         text-align: right;
         width: -webkit-fill-available;
-        padding: 0 15px;
+        padding: 5px 15px;
         overflow: hidden;
 
         display: flex;
         flex-direction: column;
         justify-content: center;
+
+        &.event-name {
+            word-break: break-all;
+        }
+        &.event-status {
+            border-radius: 5px 0 0 5px;
+            background-color: yellow;
+            &.empty {
+                background-color: red;
+            }
+            &.full {
+                background-color: green;
+            }
+        }
     }
     
-    .event-item {
+    .event-table-row {
         cursor: pointer;
-        padding: 5px 0;
-        margin: 10px 20px;
+        margin: 10px $table-mragin;
         border-radius: 5px;
         background-color: #f8f8f8;
         transition: box-shadow .3s;
 
         &:hover {
-            box-shadow: 0 0 11px rgba(33,33,33,.4); 
+            // box-shadow: 0 0 11px rgba(33,33,33,.4);
+            box-shadow: 0px 0 7px 0 rgba(0, 0, 0, 0.17); 
         }
     }
 </style>

@@ -39,6 +39,7 @@ $link-padding: 15px;
     }
     
     .link {
+        font-size: $links-font-size;
         padding: $link-padding;
         cursor: pointer;
     }
