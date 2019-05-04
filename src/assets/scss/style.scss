@@ -1,0 +1,75 @@
+@import './fonts.scss';
+
+$padding: 4vw;
+$border-color: lightgrey;
+$app-blue: #797ee6;
+$app-green: #0080009c;
+
+body {
+  margin: 0;
+}
+
+input {
+  font-family: 'Heebo', sans-serif;
+  border: none;
+  direction: rtl;
+  border-bottom: 1px solid $border-color;
+  outline: none;
+}
+
+a {
+  text-decoration: none;
+  color: #fff;
+}
+
+.btn {
+  cursor: pointer;
+  &:hover {
+    box-shadow: 0 0 11px rgba(33,33,33,.4); 
+  }
+}
+
+.flex {
+  display: flex;
+}
+
+.space-evenly {
+  justify-content: space-evenly;
+}
+
+.justify-center {
+  justify-content: center;
+}
+
+.align-center {
+  align-items: center;
+}
+
+.space-between {
+  justify-content: space-between;
+}
+
+.space-around {
+  justify-content: space-around;
+}
+
+#app {
+  font-family: 'Heebo', sans-serif;
+  overflow: hidden;
+
+
+  // scrollbar css
+  ::-webkit-scrollbar-track {
+    background-color: transperent;
+  }
+  ::-webkit-scrollbar {
+    display: block;
+    width: 4px;
+    background-color: transperent;
+  }
+  ::-webkit-scrollbar-thumb {
+    display: block;
+    border-radius: 10px;
+    background-color: $border-color;
+  }
+}
