@@ -16,8 +16,10 @@
                 </router-link>
             </div>
         </div>
-        <div class="content">
-            <router-view/>
+        <div class="main-content" :class="{ 'fade-enter': fadeEnder, 'fade-leave': fadeLeave }">
+            <!-- <transition name="fade" mode="out-in"> -->
+                <router-view />
+            <!-- </transition> -->
             <!-- <EventsTable ref="eventsTable" /> -->
         </div>
     </div>
@@ -31,9 +33,20 @@ export default {
     data(){
         return {
             appConfig,
+            fadeEnder: true,
+            fadeLeave: false,
             searchInput: null
         }
     },
+    beforeRouteUpdate(to, from, next){
+        this.fadeEnter = false;
+        this.fadeLeave = true;
+        setTimeout(() => {
+          this.fadeLeave = false;
+          this.fadeEnter = true;
+          next();
+        }, 300)
+      },
     methods: {
         search(event){   
             this.$refs.eventsTable.search(event.target.value);
@@ -50,8 +63,18 @@ export default {
         padding: 10px $padding;
     }
 
-    .content {
+    .main-content {
         margin-top: 10px;
+        transition: opacity .3s;
+        opacity: 1;
+    }
+
+    .fade-enter {
+        opacity: 1;
+    }
+
+    .fade-leave {
+        opacity: 0;
     }
 
     .btn {
@@ -84,6 +107,15 @@ export default {
             position: absolute;
             right: 0;
             top: 7px;
+        }
+    }
+
+    @media (max-width: 768px){
+        .main {
+            width: max-content;
+            overflow: auto;
+            position: relative;
+            top: 62px;
         }
     }
 </style>

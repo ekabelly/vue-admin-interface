@@ -33,6 +33,9 @@ $navbar-height: 55px;
         background-color: #fff;
         border-left: 1px solid $border-color;
         height: -webkit-fill-available;
+        a, div {
+            text-align: center;
+        }
     }
 
     .border-bottom {
@@ -41,7 +44,7 @@ $navbar-height: 55px;
     }
 
     .btn {
-        font-size: 25px;
+        font-size: 16px;
     }
 
     .create-new-event {

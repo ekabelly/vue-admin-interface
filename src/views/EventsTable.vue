@@ -140,10 +140,17 @@ $table-mragin: 20px;
 
     .events-table {
         font-size: $text-font-size;
+        @media (max-width: 768px){
+            font-size: 20px;
+        }
     }
 
     .table-body {
-        max-height: calc(100vh - 165px);
+        max-height: calc(100vh - 210px);
+        
+        @media (max-width: 768px){
+            max-height: calc(100vh - 272px);
+        }
         overflow: auto;
     }
 

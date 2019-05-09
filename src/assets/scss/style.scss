@@ -5,8 +5,9 @@ $border-color: #e1e1e1;
 $app-blue: #3b7dee;
 $app-green: #0080009c;
 
-$links-font-size: 12px;
-$text-font-size: 16px;
+$links-font-size: 14px;
+$text-font-size: 12px;
+$btns-font-size: 18px;
 
 body {
   margin: 0;
@@ -28,7 +29,13 @@ a {
 .btn {
   cursor: pointer;
   font-size: $links-font-size;
-  &:hover {
+    @media (max-width: 768px){
+      font-size: 22px;
+    }
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    &:hover {
     // box-shadow: 0px 0 7px 0 rgba(0, 0, 0, 0.17);
     box-shadow: 0 0 11px rgba(33,33,33,.4); 
   }
@@ -61,6 +68,10 @@ a {
 #app {
   font-family: 'Heebo', sans-serif;
   overflow: hidden;
+
+  @media (max-width: 768px) {
+    overflow: auto;
+  }
 
 
   // scrollbar css
