@@ -1,0 +1,3 @@
+export default {
+    STATE_STORAGE_SAVE_DURATION_IN_MINUTES: 180
+};

@@ -1,4 +1,6 @@
 import Vue from 'vue'
+import firebase from 'firebase'
+import firebaseConfig from '@/config/firebase.config';
 import App from './App.vue'
 
 import Navbar from './components/Navbar.vue'
@@ -9,6 +11,8 @@ import store from './store'
 
 import './assets/scss/style.scss';
 
+
+firebase.initializeApp(firebaseConfig);
 
 Vue.config.productionTip = false
 

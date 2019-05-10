@@ -1,30 +1,33 @@
 <template>
-  <div id="app" class="flex">
-    <div class="content">
-      <app-navbar />
-      <!-- <transition name="fade"> -->
-        <router-view  />
-      <!-- </transition> -->
+  <div id="app">
+    <div class="login" v-if="!loggedIn">
+      <Login v-model="loggedIn" />
     </div>
-    <div class="side-nav">
-      <app-sidenav />
+    <div class="app-content flex" v-if="loggedIn">
+      <div class="content">
+        <app-navbar />
+          <router-view  />
+      </div>
+      <div class="side-nav">
+        <app-sidenav />
+      </div>
     </div>
   </div>
 </template>
 
 <script>
+import Login from '@/views/Login.vue';
+
 export default {
   name: 'App',
-  // watch: {
-  //   $route(){
-  //     this.fadeEnter = false;
-  //     this.fadeLeave = true;
-  //     setTimeout(() => {
-  //       this.fadeLeave = false;
-  //       this.fadeEnter = true;
-  //     }, 500)
-  //   }
-  // }
+  components: {
+    Login
+  },
+  data(){
+    return {
+      loggedIn: false
+    }
+  }
 }
 </script>
 

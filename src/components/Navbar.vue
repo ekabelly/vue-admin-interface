@@ -7,7 +7,7 @@
         </div>
         <div class="links-container flex" :class="{ 'open': menuOpen }">
             <div class="user-state link">
-                שלום עידו, התנתק 
+                שלום {{ $store.getters.user.displayName }}, <span class="logout" @click="$store.dispatch('logout')"> התנתק/י  </span>
             </div>
             <div class="config link">
                 הגדרות
@@ -54,6 +54,10 @@ export default {
     .links-container {
         width: fit-content;
         margin-left: calc(#{$padding} - #{$link-padding});
+    }
+
+    .user-state {
+        direction: rtl;
     }
     
     .link {
