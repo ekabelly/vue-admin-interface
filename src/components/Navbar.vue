@@ -65,7 +65,7 @@ export default {
     .link {
         font-size: $links-font-size;
         @media (max-width: 768px){
-            font-size: 22px;
+            font-size: 18px;
         }
         padding: $link-padding;
         cursor: pointer;

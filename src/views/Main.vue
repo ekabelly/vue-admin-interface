@@ -8,9 +8,12 @@
                 </div>
             </div>
             <div 
-            class="btns-container flex" 
-            :class="{ 'justify-center': $route.name !== appConfig.routes.eventsTable, 'flex-end': $route.name === appConfig.routes.eventsTable }"
+                class="btns-container flex" 
+                :class="{ 'justify-center': $route.name !== appConfig.routes.eventsTable && $store.getters.isMobile }"
             >
+                <div class="btn volunteers-btn">
+                   מתנדבים
+                </div>
                 <div class="btn general-messages">
                     הודעות כלליות
                 </div>
@@ -20,7 +23,7 @@
             </div>
         </div>
         <div class="main-content" :class="{ 'fade-enter': fadeEnder, 'fade-leave': fadeLeave }">
-                <router-view />
+            <router-view ref="eventsTable" />
         </div>
     </div>
 </template>
@@ -48,7 +51,7 @@ export default {
         }, 300)
     },
     methods: {
-        search(event){   
+        search(event){  
             this.$refs.eventsTable.search(event.target.value);
         }
     }
@@ -79,6 +82,11 @@ export default {
 
     .btns-container {
         width: -webkit-fill-available;
+        justify-content: flex-end;
+
+        &.justify-center {
+            justify-content: center;
+        }
     }
 
     .btn {
@@ -86,6 +94,7 @@ export default {
         width: 120px;
         @media (max-width: 768px){
             width: 150px;
+            font-size: 16px;
         }
         text-align: center;
         // border-radius: 40px;
@@ -98,9 +107,14 @@ export default {
             background-color: $app-blue;
         }
 
-        &.general-messages {
+        &.general-messages,
+        &.volunteers-btn {
             background-color: #fff;
             color: $app-blue;
+        }
+        
+        &.general-messages {
+            margin-left: 20px;
         }
     }
 

@@ -19,8 +19,9 @@
         </div>
         <div class="table-body" v-if="isData">
             <div class="event-table-row flex" v-for="event of filteredEventsArr" :key="event.key" @click="navigateToEvent(event.key)">
-                <div class="event-table-cell event-status" :class="{ full: handleVolunteersStatus(event) === eventConfig.full, empty: handleVolunteersStatus(event) === eventConfig.notFull }">
-                    {{ handleVolunteersStatus(event) }}
+                <div class="event-table-cell event-status">
+                    <img src="@/assets/img/x-red.png" />
+                    <span>{{ handleVolunteersStatus(event) }}</span>
                 </div>
                 <div class="event-table-cell">
                     {{ handleEventType(event.type) }}
@@ -141,7 +142,7 @@ $table-mragin: 20px;
     .events-table {
         font-size: $text-font-size;
         @media (max-width: 768px){
-            font-size: 20px;
+            font-size: 16px;
         }
     }
 
@@ -176,18 +177,27 @@ $table-mragin: 20px;
         flex-direction: column;
         justify-content: center;
 
+        img {
+            width: 20px;
+            margin-left: 10px;
+        }
+
         &.event-name {
             word-break: break-all;
         }
         &.event-status {
             border-radius: 5px 0 0 5px;
-            background-color: yellow;
-            &.empty {
-                background-color: red;
-            }
-            &.full {
-                background-color: green;
-            }
+            display: flex;
+            align-items: center;
+            justify-content: flex-start;
+            flex-direction: row;
+            // background-color: yellow;
+            // &.empty {
+            // background-color: red;
+            // }
+            // &.full {
+            // background-color: green;
+            // }
         }
     }
     
