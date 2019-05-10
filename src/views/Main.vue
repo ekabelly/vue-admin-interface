@@ -1,5 +1,5 @@
 <template>
-    <div class="main">
+    <div class="main" :class="{ 'showing-events-table': $route.name === appConfig.routes.eventsTable }">
         <div class="header flex space-between">
             <div class="search flex">
                 <div v-if="$route.name === appConfig.routes.eventsTable" class="flex">
@@ -7,7 +7,10 @@
                     <img src="@/assets/img/search.png" alt="" v-if="!searchInput || searchInput === ''">
                 </div>
             </div>
-            <div class="btns-container flex">
+            <div 
+            class="btns-container flex" 
+            :class="{ 'justify-center': $route.name !== appConfig.routes.eventsTable, 'flex-end': $route.name === appConfig.routes.eventsTable }"
+            >
                 <div class="btn general-messages">
                     הודעות כלליות
                 </div>
@@ -17,10 +20,7 @@
             </div>
         </div>
         <div class="main-content" :class="{ 'fade-enter': fadeEnder, 'fade-leave': fadeLeave }">
-            <!-- <transition name="fade" mode="out-in"> -->
                 <router-view />
-            <!-- </transition> -->
-            <!-- <EventsTable ref="eventsTable" /> -->
         </div>
     </div>
 </template>
@@ -42,11 +42,11 @@ export default {
         this.fadeEnter = false;
         this.fadeLeave = true;
         setTimeout(() => {
-          this.fadeLeave = false;
-          this.fadeEnter = true;
-          next();
+            this.fadeLeave = false;
+            this.fadeEnter = true;
+            next();
         }, 300)
-      },
+    },
     methods: {
         search(event){   
             this.$refs.eventsTable.search(event.target.value);
@@ -77,12 +77,21 @@ export default {
         opacity: 0;
     }
 
+    .btns-container {
+        width: -webkit-fill-available;
+    }
+
     .btn {
         padding: 5px 0;
         width: 120px;
+        @media (max-width: 768px){
+            width: 150px;
+        }
         text-align: center;
-        border-radius: 40px;
+        // border-radius: 40px;
+        border: 1px solid $app-blue;
         cursor: pointer;
+        
         
         &.events {
             margin-left: 20px;
@@ -90,7 +99,8 @@ export default {
         }
 
         &.general-messages {
-            background-color: $app-green;
+            background-color: #fff;
+            color: $app-blue;
         }
     }
 
@@ -112,7 +122,10 @@ export default {
 
     @media (max-width: 768px){
         .main {
-            width: max-content;
+
+            &.showing-events-table {
+                width: max-content;
+            }
             overflow: auto;
             position: relative;
             top: 62px;

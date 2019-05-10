@@ -1,26 +1,28 @@
 <template>
-    <div class="navbar" :class="{ black: menuOpen }">
+    <div class="navbar" :class="{ black: menuOpen }" >
         <div class="hamburger" @click="toggleMenu">
             <div class="hamburger-line" :class="{ 'rotate reverse white': menuOpen }"></div>
             <div class="hamburger-line" :class="{ 'white': menuOpen }"></div>
             <div class="hamburger-line" :class="{ 'rotate white': menuOpen }"></div>
         </div>
         <div class="links-container flex" :class="{ 'open': menuOpen }">
-            <div class="user-state link">
+            <div class="user-state link"> 
+                <img src="@/assets/img/user.png" alt="" v-if="!$store.getters.isMobile">
                 שלום {{ $store.getters.user.displayName }}, <span class="logout" @click="$store.dispatch('logout')"> התנתק/י  </span>
             </div>
             <div class="config link">
-                הגדרות
+                הגדרות <img src="@/assets/img/settings.png" alt="" v-if="!$store.getters.isMobile">
             </div>
-            <div class="volunteers link">
-                מתנדבים
-            </div>
-            <div class="volunteers link mobile-only">
-                יצירת אירועי חדש
-            </div>
-            <div class="volunteers link mobile-only">
-                אירועים פעילים
-            </div>
+            <router-link to="/event">
+                <div class="volunteers link mobile-only" @click="toggleMenu">
+                    יצירת אירועי חדש
+                </div>
+            </router-link>
+            <router-link to="/events">
+                <div  @click="toggleMenu" class="volunteers link mobile-only">
+                    אירועים פעילים
+                </div>
+            </router-link>
             <div class="volunteers link mobile-only">
                 ארכיון אירועים
             </div>
@@ -67,6 +69,13 @@ export default {
         }
         padding: $link-padding;
         cursor: pointer;
+        display: flex;
+        justify-content: space-around;
+        align-items: center;
+        img {
+            height: 15px;
+            margin-left: 5px;
+        }
     }
 
     .mobile-only {

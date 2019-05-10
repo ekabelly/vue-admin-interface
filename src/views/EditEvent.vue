@@ -12,6 +12,11 @@ export default {
             eventId: null
         }
     },
+    watch: {
+        $route(){
+            this.eventId = this.$route.params.id;
+        }
+    },
     created(){
         this.eventId = this.$route.params.id;
     }

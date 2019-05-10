@@ -27,6 +27,9 @@ export default {
     return {
       loggedIn: false
     }
+  },
+  created(){
+    this.$store.commit('setIsMobile');
   }
 }
 </script>

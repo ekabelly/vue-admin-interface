@@ -3,11 +3,11 @@
         <div class="logo border-bottom">
             <img src="@/assets/img/logo.png" alt="">
         </div>
-        <div class="create-new-event btn border-bottom flex align-center justify-center">
-            <router-link to="/event">
+        <router-link to="/event">
+            <div class="create-new-event btn border-bottom flex align-center justify-center">
                 יצירת אירוע חדש
-            </router-link>
-        </div>
+            </div>
+        </router-link>
         <div class="btn border-bottom flex align-center justify-center">
             <div>
                 אירועים פעילים

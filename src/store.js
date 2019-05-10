@@ -36,15 +36,20 @@ const vuexCookie = new VuexPersistence({
 
 export default new Vuex.Store({
   state: {
-    user: null
+    user: null,
+    isMobile: window.innerWidth < 768
   },
   getters: {
-    user: state => state.user
+    user: state => state.user,
+    isMobile: state => state.isMobile
   },
   mutations: {
     setUser: (state, user) => {
       state.user = user;
     },
+    setIsMobile(state){
+      state.isMobile = window.innerWidth < 768
+    }
   },
   actions: {
     logout: context => {
