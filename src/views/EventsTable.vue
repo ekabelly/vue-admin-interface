@@ -20,7 +20,7 @@
         <div class="table-body" v-if="isData">
             <div class="event-table-row flex" v-for="event of filteredEventsArr" :key="event.key" @click="navigateToEvent(event.key)">
                 <div class="event-table-cell event-status">
-                    <img src="@/assets/img/x-red.png" />
+                    <img :src="handleStatusIcon(event)" />
                     <span>{{ handleVolunteersStatus(event) }}</span>
                 </div>
                 <div class="event-table-cell">
@@ -72,6 +72,13 @@ export default {
                 this.filteredEventsArr = [...this.eventsArr];
                 this.isData = true;
             }
+        },
+        handleStatusIcon(event){
+            let imgName = 'x-red';
+            if(this.handleVolunteersStatus(event) === eventConfig.full){
+                imgName = 'check-green';
+            }
+            return require(`@/assets/img/${imgName}.png`);
         },
         handleVolunteersStatus(event){
             if(event.personal){
