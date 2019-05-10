@@ -1,7 +1,7 @@
 <template>
     <div class="side-nav">
         <div class="logo border-bottom">
-            logo
+            <img src="@/assets/img/logo.png" alt="">
         </div>
         <div class="create-new-event btn border-bottom flex align-center justify-center">
             <router-link to="/event">
@@ -28,7 +28,7 @@
 $navbar-height: 55px;
 
     .side-nav {
-        padding-top: $navbar-height;
+        // padding-top: $navbar-height;
         // width: 25vw;
         background-color: #fff;
         border-left: 1px solid $border-color;
@@ -38,9 +38,17 @@ $navbar-height: 55px;
         }
     }
 
+    .logo img {
+        width: 195px;
+    }
+
     .border-bottom {
         border-bottom: 1px solid grey;
         height: 70px;
+
+        &.logo {
+            height: auto;
+        }
     }
 
     .btn {

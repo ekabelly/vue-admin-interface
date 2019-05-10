@@ -1,4 +1,5 @@
 @import './fonts.scss';
+@import './firebaseui.scss';
 
 $padding: 4vw;
 $border-color: #e1e1e1;
@@ -43,6 +44,10 @@ a {
 
 .flex {
   display: flex;
+}
+
+.flex-column {
+  flex-direction: column;
 }
 
 .space-evenly {
