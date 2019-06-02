@@ -14,9 +14,12 @@
                 <div class="btn volunteers-btn">
                    מתנדבים
                 </div>
-                <div class="btn general-messages">
+                <!-- <div class="btn general-messages">
                     הודעות כלליות
-                </div>
+                </div> -->
+                <router-link class="btn general-messages" to="/news-feed">
+                     הודעות כלליות
+                </router-link>
                 <router-link class="btn events" to="/events">
                     אירועים
                 </router-link>
@@ -100,17 +103,22 @@ export default {
         // border-radius: 40px;
         border: 1px solid $app-blue;
         cursor: pointer;
+        transition: background-color .3s;
         
         
         &.events {
             margin-left: 20px;
-            background-color: $app-blue;
         }
 
         &.general-messages,
-        &.volunteers-btn {
+        &.volunteers-btn,
+        &.events {
             background-color: #fff;
             color: $app-blue;
+            &.router-link-active {
+                background-color: $app-blue;
+                color: #fff;
+            }
         }
         
         &.general-messages {

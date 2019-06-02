@@ -36,7 +36,13 @@ export default new Router({
           path:'/event/:id',
           name:'edit-event',
           component: () => import(/* webpackChunkName: 'main' */ './views/EditEvent.vue')
+        },
+        {
+          path:'/news-feed/',
+          name:'edit-event',
+          component: () => import(/* webpackChunkName: 'main' */ './views/NewsFeed.vue')
         }
+
       ]
     }
   ]
