@@ -70,7 +70,12 @@ export default {
             console.log({ message });
             const res = await messagesService.submitMessage(message);
             console.log({ res });
-            
+            if(res && res.status === 200){
+                alert('ההודעה התווספה בהצלחה.');
+                this.$router.push('/events');
+                return;
+            }
+            alert('הייתה בעיה בשירות. אנא נסה שוב מאוחר יותר.');
         },
         formatEditor(editor){
             editor.format('direction', 'rtl');

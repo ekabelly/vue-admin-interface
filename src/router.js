@@ -19,7 +19,7 @@ export default new Router({
             if(user){
               return next('/events');
             }
-            next('/')
+            next();
           }
         },
         {

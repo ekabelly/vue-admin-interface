@@ -1,0 +1,152 @@
+[debug] [2019-06-02T22:42:30.608Z] ----------------------------------------------------------------------
+[debug] [2019-06-02T22:42:30.611Z] Command:       C:\Program Files\nodejs\node.exe C:\Users\Eedoh\AppData\Roaming\npm\node_modules\firebase-tools\lib\bin\firebase.js deploy
+[debug] [2019-06-02T22:42:30.611Z] CLI Version:   6.10.0
+[debug] [2019-06-02T22:42:30.611Z] Platform:      win32
+[debug] [2019-06-02T22:42:30.611Z] Node Version:  v10.16.0
+[debug] [2019-06-02T22:42:30.612Z] Time:          Mon Jun 03 2019 01:42:30 GMT+0300 (GMT+03:00)
+[debug] [2019-06-02T22:42:30.612Z] ----------------------------------------------------------------------
+[debug] 
+[debug] [2019-06-02T22:42:30.621Z] > command requires scopes: ["email","openid","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","https://www.googleapis.com/auth/cloud-platform"]
+[debug] [2019-06-02T22:42:30.621Z] > authorizing via signed-in user
+[debug] [2019-06-02T22:42:30.621Z] [iam] checking project admin-interface-dev for permissions ["firebase.projects.get","firebasehosting.sites.update"]
+[debug] [2019-06-02T22:42:30.623Z] >>> HTTP REQUEST POST https://cloudresourcemanager.googleapis.com/v1/projects/admin-interface-dev:testIamPermissions  
+
+[debug] [2019-06-02T22:42:31.629Z] <<< HTTP RESPONSE 200
+[debug] [2019-06-02T22:42:31.633Z] >>> HTTP REQUEST GET https://firebase.googleapis.com/v1beta1/projects/admin-interface-dev  
+ 
+[debug] [2019-06-02T22:42:32.104Z] <<< HTTP RESPONSE 200
+[info] 
+[info] === Deploying to 'admin-interface-dev'...
+[info] 
+[info] i  deploying hosting
+[debug] [2019-06-02T22:42:32.113Z] >>> HTTP REQUEST POST https://firebasehosting.googleapis.com/v1beta1/sites/admin-interface-dev/versions  
+
+[debug] [2019-06-02T22:42:43.078Z] <<< HTTP RESPONSE 503
+[debug] [2019-06-02T22:42:43.078Z] <<< HTTP RESPONSE BODY
+[error] 
+[error] Error: HTTP Error: 503, The service is currently unavailable.
+[debug] [2019-06-02T22:42:43.416Z] Error Context: {
+  "body": {
+    "error": {
+      "code": 503,
+      "message": "The service is currently unavailable.",
+      "status": "UNAVAILABLE"
+    }
+  },
+  "response": {
+    "statusCode": 503,
+    "body": {
+      "error": {
+        "code": 503,
+        "message": "The service is currently unavailable.",
+        "status": "UNAVAILABLE"
+      }
+    },
+    "headers": {
+      "vary": "X-Origin, Referer, Origin,Accept-Encoding",
+      "content-type": "application/json; charset=UTF-8",
+      "date": "Sun, 02 Jun 2019 22:42:44 GMT",
+      "server": "ESF",
+      "cache-control": "private",
+      "x-xss-protection": "0",
+      "x-frame-options": "SAMEORIGIN",
+      "x-content-type-options": "nosniff",
+      "alt-svc": "quic=\":443\"; ma=2592000; v=\"46,44,43,39\"",
+      "accept-ranges": "none",
+      "transfer-encoding": "chunked"
+    },
+    "request": {
+      "uri": {
+        "protocol": "https:",
+        "slashes": true,
+        "auth": null,
+        "host": "firebasehosting.googleapis.com",
+        "port": 443,
+        "hostname": "firebasehosting.googleapis.com",
+        "hash": null,
+        "search": null,
+        "query": null,
+        "pathname": "/v1beta1/sites/admin-interface-dev/versions",
+        "path": "/v1beta1/sites/admin-interface-dev/versions",
+        "href": "https://firebasehosting.googleapis.com/v1beta1/sites/admin-interface-dev/versions"
+      },
+      "method": "POST"
+    }
+  }
+}
+[debug] [2019-06-02T22:43:53.145Z] ----------------------------------------------------------------------
+[debug] [2019-06-02T22:43:53.147Z] Command:       C:\Program Files\nodejs\node.exe C:\Users\Eedoh\AppData\Roaming\npm\node_modules\firebase-tools\lib\bin\firebase.js deploy
+[debug] [2019-06-02T22:43:53.148Z] CLI Version:   6.10.0
+[debug] [2019-06-02T22:43:53.148Z] Platform:      win32
+[debug] [2019-06-02T22:43:53.148Z] Node Version:  v10.16.0
+[debug] [2019-06-02T22:43:53.148Z] Time:          Mon Jun 03 2019 01:43:53 GMT+0300 (GMT+03:00)
+[debug] [2019-06-02T22:43:53.148Z] ----------------------------------------------------------------------
+[debug] 
+[debug] [2019-06-02T22:43:53.157Z] > command requires scopes: ["email","openid","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","https://www.googleapis.com/auth/cloud-platform"]
+[debug] [2019-06-02T22:43:53.157Z] > authorizing via signed-in user
+[debug] [2019-06-02T22:43:53.157Z] [iam] checking project admin-interface-dev for permissions ["firebase.projects.get","firebasehosting.sites.update"]
+[debug] [2019-06-02T22:43:53.159Z] >>> HTTP REQUEST POST https://cloudresourcemanager.googleapis.com/v1/projects/admin-interface-dev:testIamPermissions  
+
+[debug] [2019-06-02T22:43:54.127Z] <<< HTTP RESPONSE 200
+[debug] [2019-06-02T22:43:54.131Z] >>> HTTP REQUEST GET https://firebase.googleapis.com/v1beta1/projects/admin-interface-dev  
+ 
+[debug] [2019-06-02T22:43:54.595Z] <<< HTTP RESPONSE 200
+[info] 
+[info] === Deploying to 'admin-interface-dev'...
+[info] 
+[info] i  deploying hosting
+[debug] [2019-06-02T22:43:54.604Z] >>> HTTP REQUEST POST https://firebasehosting.googleapis.com/v1beta1/sites/admin-interface-dev/versions  
+
+[debug] [2019-06-02T22:44:05.545Z] <<< HTTP RESPONSE 503
+[debug] [2019-06-02T22:44:05.545Z] <<< HTTP RESPONSE BODY
+[error] 
+[error] Error: HTTP Error: 503, The service is currently unavailable.
+[debug] [2019-06-02T22:44:05.888Z] Error Context: {
+  "body": {
+    "error": {
+      "code": 503,
+      "message": "The service is currently unavailable.",
+      "status": "UNAVAILABLE"
+    }
+  },
+  "response": {
+    "statusCode": 503,
+    "body": {
+      "error": {
+        "code": 503,
+        "message": "The service is currently unavailable.",
+        "status": "UNAVAILABLE"
+      }
+    },
+    "headers": {
+      "vary": "X-Origin, Referer, Origin,Accept-Encoding",
+      "content-type": "application/json; charset=UTF-8",
+      "date": "Sun, 02 Jun 2019 22:44:06 GMT",
+      "server": "ESF",
+      "cache-control": "private",
+      "x-xss-protection": "0",
+      "x-frame-options": "SAMEORIGIN",
+      "x-content-type-options": "nosniff",
+      "alt-svc": "quic=\":443\"; ma=2592000; v=\"46,44,43,39\"",
+      "accept-ranges": "none",
+      "transfer-encoding": "chunked"
+    },
+    "request": {
+      "uri": {
+        "protocol": "https:",
+        "slashes": true,
+        "auth": null,
+        "host": "firebasehosting.googleapis.com",
+        "port": 443,
+        "hostname": "firebasehosting.googleapis.com",
+        "hash": null,
+        "search": null,
+        "query": null,
+        "pathname": "/v1beta1/sites/admin-interface-dev/versions",
+        "path": "/v1beta1/sites/admin-interface-dev/versions",
+        "href": "https://firebasehosting.googleapis.com/v1beta1/sites/admin-interface-dev/versions"
+      },
+      "method": "POST"
+    }
+  }
+}
