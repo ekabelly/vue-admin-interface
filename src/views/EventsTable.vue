@@ -7,7 +7,7 @@
             <div class="table-title event-table-cell">
                 רשומים/קהל רחב
             </div>
-            <div class="table-title event-table-cell" @click="sortByDate(filteredEventsArr, dateSortDir)">
+            <div class="table-title event-table-cell pointer" @click="sortByDate(filteredEventsArr, dateSortDir)">
                 תאריך
             </div>
             <div class="table-title event-table-cell">

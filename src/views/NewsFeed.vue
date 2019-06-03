@@ -1,86 +1,109 @@
 <template>
     <div class="news-feed">
-        <div class="quill-container">
-            <div id="toolbar">
-                <!-- <button class="ql-bold">Bold</button>
-                <button class="ql-italic">Italic</button>
-                <button class="ql-color">color</button>
-                <button class="ql-font">font</button>
-                <button class="ql-link">link</button>
-                <button class="ql-size">size</button>
-                <button class="ql-Strikethrough">Strikethrough</button>
-                <button class="ql-Underline">Underline</button> -->
+        <div class="table-head flex space-evenly">
+            <div class="table-title message-table-cell">
+                מחיקה
             </div>
-            <div id="editor"></div>
-            <div class="flex">
-                <div class="btn send-btn" @click="submitText">
-                    פרסם באפליקציה
+            <div class="table-title message-table-cell">
+                מפרסם
+            </div>
+            <div class="table-title message-table-cell pointer"  @click="sortByDate(filteredMessagewsArr, dateSortDir)">
+                תאריך
+            </div>
+            <div class="table-title message-table-cell message-name">
+                הודעה
+            </div>
+        </div>
+        <div class="table-body" v-if="isData">
+            <div class="message-table-row flex" v-for="message of filteredMessagewsArr" :key="message.key" @click="editFeed($event, message.key)">
+                <div class="message-table-cell delete-cell">
+                    <button 
+                    v-if="loadingBtnKey !== message.key"
+                    class="btn delete-btn" 
+                    @click="deleteMessage(message.key)"
+                    >
+                        מחיקה
+                    </button>
+                    <span v-else> טוען... </span>
                 </div>
+                <div class="message-table-cell">
+                    {{ message.publisher.displayName }} <br>
+                    {{ message.publisher.email }}
+                </div>
+                <div class="message-table-cell">
+                    {{ parseDate(message.publishDate) }}
+                </div>
+                <div class="message-table-cell message-name" v-html="message.content"></div>
             </div>
         </div>
     </div>
 </template>
 
 <script>
-import Quill from 'quill';
-import messagesService from '@/services/messages-service';
+import moment from 'moment';
 
 export default {
     data(){
         return {
-            editor: null
+            messagesObj: {},
+            messagesArr: [],
+            filteredMessagewsArr: [],
+            isData: false,
+            dateSortDir: false,
+            loadingBtnKey: null
         }
     },
-    mounted(){
-        const toolbar = [
-            ['bold', 'italic', 'underline', 'strike'],        // toggled buttons
-            // ['blockquote', 'code-block'],
-
-            // [{ 'header': 1 }, { 'header': 2 }],               // custom button values
-            [{ 'list': 'ordered'}, { 'list': 'bullet' }],
-            [{ 'script': 'sub'}, { 'script': 'super' }],      // superscript/subscript
-            [{ 'indent': '-1'}, { 'indent': '+1' }],          // outdent/indent
-            [{ 'direction': 'rtl' }],                         // text direction
-
-            [{ 'size': ['small', false, 'large', 'huge'] }],  // custom dropdown
-            [{ 'header': [1, 2, 3, 4, 5, 6, false] }],
-
-            [{ 'color': [] }, { 'background': [] }],          // dropdown with defaults from theme
-            // [{ 'font': [] }],
-            [{ 'align': [] }],
-
-            // ['clean']                                         // remove formatting button
-        ];
-        const editor = new Quill('#editor', {
-            modules: { toolbar },
-            theme: 'snow'
-        });
-        this.formatEditor(editor);
-        // editor.format('height', '300px');
-
+    created(){
+        this.fetchInitialData();
     },
     methods: {
-        async submitText(){
-            // console.log({ text: this.editor.getText() });
-            const message = {
-                publishDate: new Date(),
-                content: this.editor.getText(),
-                publisher: this.$store.getters.user
-            };
-            console.log({ message });
-            const res = await messagesService.submitMessage(message);
-            console.log({ res });
-            if(res && res.status === 200){
-                alert('ההודעה התווספה בהצלחה.');
-                this.$router.push('/events');
+        async fetchInitialData(){
+            const data = await this.$store.dispatch('fetchMessages');
+            if(data){
+                this.loadingBtnKey = null;
+                this.messagesObj = data;
+                // retanfost the obj to arr, add to every itiration its key and sort if bt date.
+                this.messagesArr = this.sortByDate(Object.keys(data).map(messagesKey => 
+                    ({...data[messagesKey], key: messagesKey})));
+                this.filteredMessagewsArr = [...this.messagesArr];
+                this.isData = true;
+            }
+        },
+        sortByDate(messagesArr){
+            console.log('sort');
+            
+            if(this.sortDir){
+                this.sortDir = false;
+                return messagesArr.sort((a, b) => new Date(a.publishDate) - new Date(b.publishDate));
+            }
+            this.sortDir = true;
+            return messagesArr.sort((a, b) => new Date(b.publishDate) - new Date(a.publishDate));
+        },
+        parseDate(date){
+            moment.locale('he');
+            return moment(date).format('DD.MM.YYYY');
+        },
+        search(text){
+            if(!text || text === ''){
+                this.filteredMessagewsArr = [...this.messagesArr];
                 return;
             }
-            alert('הייתה בעיה בשירות. אנא נסה שוב מאוחר יותר.');
+            this.filteredMessagewsArr = this.filteredMessagewsArr.filter(message =>
+                message.content.includes(text));
         },
-        formatEditor(editor){
-            editor.format('direction', 'rtl');
-            editor.format('align', 'right');
-            this.editor  = editor;
+        editFeed(event, messageKey){
+            if(event.target.parentElement.classList.contains('delete-cell') ||
+            event.target.classList.contains('delete-cell')){
+                return;
+            }
+            this.$router.push(`/edit-feed/${messageKey}`);
+        },
+        async deleteMessage(messageKey){
+            this.loadingBtnKey = messageKey;
+            const res = await this.$store.dispatch('deleteMessage', messageKey);
+            if(res){
+                this.fetchInitialData();
+            }
         }
     }
 }
@@ -88,23 +111,86 @@ export default {
 
 <style lang="scss" scoped>
 @import '@/assets/scss/style.scss';
+$table-mragin: 20px;
 
-.quill-container {
-    height: 400px;
-}
+    .messages-table {
+        font-size: $text-font-size;
+        @media (max-width: 768px){
+            font-size: 16px;
+        }
+    }
 
-.send-btn {
-    background-color: $app-blue;
-    color: #fff;
-    padding: 11px 75px;
-    margin-top: 18.5px;
-    // width: 271.5px;
-}
+    .table-body {
+        max-height: calc(100vh - 210px);
+        
+        @media (max-width: 768px){
+            max-height: calc(100vh - 272px);
+        }
+        overflow: auto;
+    }
+
+    .table-head {
+        background-color:#eeeeee;
+        padding: 10px 0;
+        padding-right: 4px + $table-mragin; // scroll size 4px + table items margin 20px
+        padding-left: $table-mragin;
+    }
+
+    .table-title {
+        border-left: 1px solid $border-color;
+    }
+
+    .message-table-cell {
+        direction: rtl;
+        text-align: right;
+        width: -webkit-fill-available;
+        padding: 5px 15px;
+        overflow: hidden;
+
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+
+        img {
+            width: 20px;
+            margin-left: 10px;
+        }
+
+        &.message-name {
+            word-break: break-all;
+        }
+        &.message-status {
+            border-radius: 5px 0 0 5px;
+            display: flex;
+            align-items: center;
+            justify-content: flex-start;
+            flex-direction: row;
+            // background-color: yellow;
+            // &.empty {
+            // background-color: red;
+            // }
+            // &.full {
+            // background-color: green;
+            // }
+        }
+    }
+    
+    .message-table-row {
+        cursor: pointer;
+        margin: 10px $table-mragin;
+        border-radius: 5px;
+        background-color: #f8f8f8;
+        transition: box-shadow .3s;
+
+        &:hover {
+            // box-shadow: 0 0 11px rgba(33,33,33,.4);
+            box-shadow: 0px 0 7px 0 rgba(0, 0, 0, 0.17); 
+        }
+    }
+
+    .delete-btn {
+        color: red;
+        border-color: red;
+    }
 </style>
-
-<style scoped>
-@import '../assets/scss/quill.css';
-</style>
-
-
 

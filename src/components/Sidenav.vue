@@ -4,21 +4,25 @@
             <img src="@/assets/img/logo.png" alt="">
         </div>
         <router-link to="/event">
-            <div class="create-new-event btn border-bottom flex align-center justify-center">
+            <div class="create-new-event side-nav-btn border-bottom flex align-center justify-center">
                 יצירת אירוע חדש
             </div>
         </router-link>
-        <div class="btn border-bottom flex align-center justify-center">
+        <div class="side-nav-btn border-bottom flex align-center justify-center">
             <div>
                 אירועים פעילים
             </div>
         </div>
-        <div class="btn border-bottom flex align-center justify-center">
+        <div class="side-nav-btn border-bottom flex align-center justify-center">
             <div>
                 ארכיון אירועים
             </div>
         </div>
-
+        <router-link to="/new-feed">
+            <div class="side-nav-btn border-bottom flex align-center justify-center">
+                יצירת הודעה חדש
+            </div>
+        </router-link>
     </div>
 </template>
 
@@ -51,8 +55,9 @@ $navbar-height: 55px;
         }
     }
 
-    .btn {
+    .side-nav-btn {
         font-size: 16px;
+        color: black;
     }
 
     .create-new-event {

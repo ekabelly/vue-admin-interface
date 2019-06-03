@@ -4,8 +4,8 @@ import moment from 'moment';
 import VuexPersistence from 'vuex-persist';
 import sessionConfig from './config/session.config';
 import eventsService from './services/events-service';
-import constants from './config/constants';
-import { isContext } from 'vm';
+import messagesService from './services/messages-service';
+import util from './util/util';
 
 Vue.use(Vuex);
 
@@ -45,7 +45,14 @@ export default new Vuex.Store({
   },
   mutations: {
     setUser: (state, user) => {
+      let reroute;
+      if(!state.user){
+        reroute = true;
+      }
       state.user = user;
+      if(reroute){
+        window.location.href = '/events'
+      }
     },
     setIsMobile(state){
       state.isMobile = window.innerWidth < 768
@@ -61,11 +68,28 @@ export default new Vuex.Store({
     },
     async fetchEvents(){
       const res = await eventsService.fetchEvents();
-      if(res && res.status === constants.successStatus){
-        return res.data;
-      }
-      return res;
-    }
+      return util.resHandler(res);
+    },
+    async fetchMessages(){
+      const res = await messagesService.fetchMessages();
+      return util.resHandler(res);
+    },
+    async fetchMessage(context, messageKey){
+      const res = await messagesService.fetchMessage(messageKey);
+      return util.resHandler(res);
+    },
+    async submitMessage(context, message){
+      const res = await messagesService.submitMessage(message);
+      return util.resHandler(res);
+    },
+    async updateMessage(context, { message, messageKey }){
+      const res = await messagesService.updateMessage(message, messageKey);
+      return util.resHandler(res);
+    },
+    async deleteMessage(context, messageKey){
+      const res = await messagesService.deleteMessage(messageKey);
+      return util.resHandler(res);
+    },
   },
   plugins: [vuexCookie.plugin]
 })

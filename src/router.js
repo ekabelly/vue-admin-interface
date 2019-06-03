@@ -39,8 +39,18 @@ export default new Router({
         },
         {
           path:'/news-feed/',
-          name:'edit-event',
+          name:'news-feed',
           component: () => import(/* webpackChunkName: 'main' */ './views/NewsFeed.vue')
+        },
+        {
+          path:'/new-feed/',
+          name:'new-feed',
+          component: () => import(/* webpackChunkName: 'main' */ './views/NewFeed.vue')
+        },
+        {
+          path:'/edit-feed/:messageKey',
+          name:'edit-feed',
+          component: () => import(/* webpackChunkName: 'main' */ './views/NewFeed.vue')
         }
 
       ]
