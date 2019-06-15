@@ -1,5 +1,6 @@
 export default {
     routes: {
-        eventsTable: 'events-table'
+        eventsTable: 'events-table',
+        newsFeed: 'news-feed'
     }
 }

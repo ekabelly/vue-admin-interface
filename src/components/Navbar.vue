@@ -15,7 +15,12 @@
             </div>
             <router-link to="/event">
                 <div class="volunteers link mobile-only" @click="toggleMenu">
-                    יצירת אירועי חדש
+                    יצירת אירוע חדש
+                </div>
+            </router-link>
+            <router-link to="/new-feed">
+                <div class="volunteers link mobile-only" @click="toggleMenu">
+                    יצירת הודעה חדשה
                 </div>
             </router-link>
             <router-link to="/events">

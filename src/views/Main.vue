@@ -1,5 +1,5 @@
 <template>
-    <div class="main" :class="{ 'showing-events-table': $route.name === appConfig.routes.eventsTable }">
+    <div class="main" :class="{ 'showing-table': $route.name === appConfig.routes.eventsTable || $route.name === appConfig.routes.newsFeed }">
         <div class="header flex space-between">
             <div class="search flex">
                 <div v-if="$route.name === appConfig.routes.eventsTable" class="flex">
@@ -26,7 +26,7 @@
             </div>
         </div>
         <div class="main-content" :class="{ 'fade-enter': fadeEnder, 'fade-leave': fadeLeave }">
-            <router-view ref="eventsTable" />
+            <router-view ref="activeView" />
         </div>
     </div>
 </template>
@@ -54,8 +54,10 @@ export default {
         }, 300)
     },
     methods: {
-        search(event){  
-            this.$refs.eventsTable.search(event.target.value);
+        search(event){
+            if(this.$refs.activeView){
+                this.$refs.activeView.search(event.target.value);
+            }
         }
     }
 }
@@ -145,10 +147,10 @@ export default {
     @media (max-width: 768px){
         .main {
 
-            &.showing-events-table {
+            &.showing-table {
                 width: max-content;
             }
-            overflow: auto;
+            // overflow: auto; removed since caused a bug with new feed
             position: relative;
             top: 62px;
         }
