@@ -6,6 +6,7 @@ import sessionConfig from './config/session.config';
 import eventsService from './services/events-service';
 import messagesService from './services/messages-service';
 import util from './util/util';
+import adminService from './services/admin-service';
 
 Vue.use(Vuex);
 
@@ -61,10 +62,14 @@ export default new Vuex.Store({
   actions: {
     logout: context => {
       context.dispatch('cleanState');
-      window.location.href = ''
+      window.location.href = '';
     },
     cleanState(context){
       context.commit('setUser', null);
+    },
+    async fetchAdmins(){
+      const res = await adminService.fetchAdmins();
+      return util.resHandler(res);
     },
     async fetchEvents(){
       const res = await eventsService.fetchEvents();

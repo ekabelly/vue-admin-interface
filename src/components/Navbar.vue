@@ -6,9 +6,9 @@
             <div class="hamburger-line" :class="{ 'rotate white': menuOpen }"></div>
         </div>
         <div class="links-container flex" :class="{ 'open': menuOpen }">
-            <div class="user-state link"> 
+            <div class="user-state"> 
                 <img src="@/assets/img/user.png" alt="" v-if="!$store.getters.isMobile">
-                שלום {{ $store.getters.user.displayName }}, <span class="logout" @click="$store.dispatch('logout')"> התנתק/י  </span>
+                <span>שלום {{ ` ${$store.getters.user.displayName}, ` }}</span>&nbsp;<span class="logout pointer" @click="$store.dispatch('logout')"> התנתק/י  </span>
             </div>
             <div class="config link">
                 הגדרות <img src="@/assets/img/settings.png" alt="" v-if="!$store.getters.isMobile">
@@ -68,12 +68,16 @@ export default {
     }
     
     .link {
+        cursor: pointer;
+    }
+
+    .user-state, 
+    .link {
         font-size: $links-font-size;
         @media (max-width: 768px){
             font-size: 18px;
         }
         padding: $link-padding;
-        cursor: pointer;
         display: flex;
         justify-content: space-around;
         align-items: center;
@@ -152,6 +156,10 @@ export default {
                 transform: rotate(25deg);
             }
         }
+    }
+
+    .logout {
+        text-decoration: underline;
     }
 </style>
 

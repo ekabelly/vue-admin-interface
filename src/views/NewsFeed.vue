@@ -27,8 +27,8 @@
                     <span v-else> טוען... </span>
                 </div>
                 <div class="message-table-cell">
-                    {{ message.publisher.displayName }} <br>
-                    {{ message.publisher.email }}
+                    {{ message.publisherDisplayName }} <br>
+                    {{ message.publisherEmail }}
                 </div>
                 <div class="message-table-cell">
                     {{ parseDate(message.publishDate) }}

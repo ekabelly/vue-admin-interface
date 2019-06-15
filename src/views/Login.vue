@@ -17,6 +17,44 @@ import firebaseui from 'firebaseui';
 export default {
     name: 'Login',
     created(){
+        if(!this.$store.getters.user){
+            console.log(firebase.auth());
+            
+            const ui = new firebaseui.auth.AuthUI(firebase.auth());
+            ui.start('#firebaseui-auth-container', {
+                callbacks: {
+                    signInSuccessWithAuthResult: async (authResult, redirectUrl) => {
+                        console.log('user login successful!', authResult);
+                        const adminsArr = await this.$store.dispatch('fetchAdmins');
+                        // debugger;
+                        if(adminsArr.includes(authResult.additionalUserInfo.profile.email)){
+                            this.$store.commit('setUser', {
+                                displayName: authResult.additionalUserInfo.profile.name,
+                            email: authResult.additionalUserInfo.profile.email 
+                        });
+                        this.$emit('input', true);
+                        } else {
+                            alert('משתמש לא מורשה.');
+                            this.$store.dispatch('logout');
+                        }
+                    },
+                    uiShown: function() {
+                        // The widget is rendered.
+                        // Hide the loader.
+                        document.getElementById('loader').style.display = 'none';
+                    }
+                },
+                // signInSuccessUrl: 'localhost:8080/',
+                signInOptions: [
+                    // List of OAuth providers supported.
+                    firebase.auth.GoogleAuthProvider.PROVIDER_ID
+                ]
+                // Other config options...
+            });
+        } else {
+            console.log('user already logged in.', this.$store.getters.user);
+            this.$emit('input', true);
+        }
         //--------------------------------- LOGIN WITH POPUP:
         //     const provider = new firebase.auth.GoogleAuthProvider();
         //     firebase.auth().signInWithPopup(provider).then(result => {
@@ -45,35 +83,6 @@ export default {
         //     this.login();
         // }
         // console.log(firebaseui);
-        if(!this.$store.getters.user){
-            const ui = new firebaseui.auth.AuthUI(firebase.auth());
-            ui.start('#firebaseui-auth-container', {
-                callbacks: {
-                    signInSuccessWithAuthResult: (authResult, redirectUrl) => {
-                        console.log('user login successful!', authResult);
-                        this.$store.commit('setUser', {
-                            displayName: authResult.additionalUserInfo.profile.name,
-                            email: authResult.additionalUserInfo.profile.email 
-                        });
-                        this.$emit('input', true);
-                    },
-                    uiShown: function() {
-                        // The widget is rendered.
-                        // Hide the loader.
-                        document.getElementById('loader').style.display = 'none';
-                    }
-                },
-                signInSuccessUrl: 'localhost:8080/',
-                signInOptions: [
-                    // List of OAuth providers supported.
-                    firebase.auth.GoogleAuthProvider.PROVIDER_ID
-                ]
-                // Other config options...
-            });
-        } else {
-            console.log('user already logged in.', this.$store.getters.user);
-            this.$emit('input', true);
-        }
 
     }
 }

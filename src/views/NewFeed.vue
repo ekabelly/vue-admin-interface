@@ -71,7 +71,8 @@ export default {
             const message = {
                 publishDate: new Date(),
                 content: document.querySelector('.ql-editor').innerHTML,
-                publisher: this.$store.getters.user
+                publisherDisplayName: this.$store.getters.user.displayName,
+                publisherEmail: this.$store.getters.user.email
             };
             let res;
             const { messageKey } = this.$route.params;
