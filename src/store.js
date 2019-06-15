@@ -1,6 +1,7 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
 import moment from 'moment';
+import firebase from 'firebase';
 import VuexPersistence from 'vuex-persist';
 import sessionConfig from './config/session.config';
 import eventsService from './services/events-service';
@@ -62,6 +63,7 @@ export default new Vuex.Store({
   actions: {
     logout: context => {
       context.dispatch('cleanState');
+      firebase.auth().signOut();
       window.location.href = '';
     },
     cleanState(context){

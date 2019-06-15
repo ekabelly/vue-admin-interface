@@ -18,7 +18,10 @@ export default {
     name: 'Login',
     created(){
         if(!this.$store.getters.user){
-            console.log(firebase.auth());
+            const provider = new firebase.auth.GoogleAuthProvider();
+            provider.setCustomParameters({
+                prompt: 'select_account'
+            });
             
             const ui = new firebaseui.auth.AuthUI(firebase.auth());
             ui.start('#firebaseui-auth-container', {
@@ -47,7 +50,15 @@ export default {
                 // signInSuccessUrl: 'localhost:8080/',
                 signInOptions: [
                     // List of OAuth providers supported.
-                    firebase.auth.GoogleAuthProvider.PROVIDER_ID
+                    {
+                        provider: firebase.auth.GoogleAuthProvider.PROVIDER_ID,
+                        scopes: [
+                            'https://www.googleapis.com/auth/contacts.readonly'
+                        ],
+                        costumParameters: {
+                            prompt: 'select_account'
+                        }
+                    }
                 ]
                 // Other config options...
             });
