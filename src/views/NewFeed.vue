@@ -14,7 +14,6 @@
 
 <script>
 import Quill from 'quill';
-import messagesService from '@/services/messages-service';
 
 export default {
     name: 'New-Feed',

@@ -26,7 +26,7 @@ export default {
             const ui = new firebaseui.auth.AuthUI(firebase.auth());
             ui.start('#firebaseui-auth-container', {
                 callbacks: {
-                    signInSuccessWithAuthResult: async (authResult, redirectUrl) => {
+                    signInSuccessWithAuthResult: async authResult => {
                         console.log('user login successful!', authResult);
                         const adminsArr = await this.$store.dispatch('fetchAdmins');
                         // debugger;
