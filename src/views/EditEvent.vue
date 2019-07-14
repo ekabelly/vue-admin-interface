@@ -5,6 +5,7 @@
 </template>
 
 <script>
+
 export default {
     name: 'editEvent',
     data(){
@@ -14,11 +15,18 @@ export default {
     },
     watch: {
         $route(){
-            this.eventId = this.$route.params.id;
+            this.setComponenetData();
         }
     },
-    created(){
-        this.eventId = this.$route.params.id;
+    mounted(){
+        this.setComponenetData();
+    },
+    methods: {
+        async setComponenetData(){
+            this.eventId = this.$route.params.id;
+            const event = await this.$store.dispatch('fetchEvent', this.eventId);
+            console.log(event);
+        }
     }
 }
 </script>
