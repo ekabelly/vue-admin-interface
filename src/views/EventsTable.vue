@@ -7,8 +7,8 @@
             <div class="table-title event-table-cell">
                 רשומים/קהל רחב
             </div>
-            <div class="table-title event-table-cell pointer" @click="sortByDate(filteredEventsArr, dateSortDir)">
-                תאריך
+            <div class="table-title table-sort-title event-table-cell pointer" @click="sortByDate">
+               <span> תאריך </span><img :class="{ down: dateSortDir }" src="../assets/img/arrow-down.png" alt="">
             </div>
             <div class="table-title event-table-cell">
                 מיקום
@@ -20,7 +20,7 @@
         <div class="table-body" v-if="isData">
             <div class="event-table-row flex" v-for="event of filteredEventsArr" :key="event.key" @click="navigateToEvent(event.key)">
                 <div class="event-table-cell event-status">
-                    <img :src="handleStatusIcon(event)" />
+                    <img class="volunteer-status-icon" :src="handleStatusIcon(event)" />
                     <span>{{ handleVolunteersStatus(event) }}</span>
                 </div>
                 <div class="event-table-cell">
@@ -66,9 +66,9 @@ export default {
             const data = await this.$store.dispatch('fetchEvents');
             if(data){
                 this.eventsObj = data;
-                // retanfost the obj to arr, add to every itiration its key and sort if bt date.
-                this.eventsArr = this.sortByDate(Object.keys(data).map(eventKey => 
-                    ({...data[eventKey], key: eventKey})));
+                // transform the obj to arr, add to every itiration its key and sort if bt date.
+                this.eventsArr = Object.keys(data).map(eventKey => 
+                    ({...data[eventKey], key: eventKey}));
                 this.filteredEventsArr = [...this.eventsArr];
                 this.isData = true;
             }
@@ -97,13 +97,13 @@ export default {
         handleEventType(eventType){
             return eventConfig.types[eventType];
         },
-        sortByDate(eventsArr){
-            if(this.sortDir){
-                this.sortDir = false;
-                return eventsArr.sort((a, b) => new Date(a.time.date) - new Date(b.time.date));
+        sortByDate(){
+            if(this.dateSortDir){
+                this.dateSortDir = false;
+                return this.filteredEventsArr.sort((a, b) => new Date(a.time.date) - new Date(b.time.date));
             }
-            this.sortDir = true;
-            return eventsArr.sort((a, b) => new Date(b.time.date) - new Date(a.time.date));
+            this.dateSortDir = true;
+            return this.filteredEventsArr.sort((a, b) => new Date(b.time.date) - new Date(a.time.date));
         },
         handleEventName(eventName){
             // this size has been tested and checked to be the best.
@@ -184,7 +184,7 @@ $table-mragin: 20px;
         flex-direction: column;
         justify-content: center;
 
-        img {
+        .volunteer-status-icon {
             width: 20px;
             margin-left: 10px;
         }
@@ -218,6 +218,22 @@ $table-mragin: 20px;
         &:hover {
             // box-shadow: 0 0 11px rgba(33,33,33,.4);
             box-shadow: 0px 0 7px 0 rgba(0, 0, 0, 0.17); 
+        }
+    }
+
+    .table-sort-title  {
+        flex-direction: row;
+        align-items: center;
+        justify-content: flex-start;
+
+        img {
+            height: 4px;
+            margin-right: 3px;
+            width: 7.5px;
+            transition: transform .3s;
+            &.down {
+                transform: rotate(180deg);
+            }
         }
     }
 </style>
