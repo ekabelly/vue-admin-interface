@@ -101,6 +101,10 @@ export default new Vuex.Store({
       const res = await messagesService.deleteMessage(messageKey);
       return util.resHandler(res);
     },
+    async fetchConfig(context){
+      const res = await eventsService.fetchConfig();
+      return util.resHandler(res);
+    }
   },
   plugins: [vuexCookie.plugin]
 })
