@@ -1,14 +1,15 @@
 <template>
     <div class="events-table">
         <div class="table-head flex space-evenly">
-            <div class="table-title event-table-cell">
+            <div class="table-title last-table-title event-table-cell">
                 סטטוס
             </div>
             <div class="table-title event-table-cell">
                 רשומים/קהל רחב
             </div>
             <div class="table-title table-sort-title event-table-cell pointer" @click="sortByDate">
-               <span> תאריך </span><img :class="{ down: dateSortDir }" src="../assets/img/arrow-down.png" alt="">
+               <span> תאריך </span>
+               <img class="arrow-down" :class="{ down: dateSortDir }" src="../assets/img/arrow-down.png" alt="">
             </div>
             <div class="table-title event-table-cell">
                 מיקום
@@ -22,6 +23,7 @@
                 <div class="event-table-cell event-status">
                     <img class="volunteer-status-icon" :src="handleStatusIcon(event)" />
                     <span>{{ handleVolunteersStatus(event) }}</span>
+                    <!-- <img class="arrow-down" src="../assets/img/arrow-down.png" alt=""> -->
                 </div>
                 <div class="event-table-cell">
                     {{ handleEventType(event.type) }}
@@ -171,6 +173,10 @@ $table-mragin: 20px;
 
     .table-title {
         border-left: 1px solid $border-color;
+        font-weight: bold;
+        &.last-table-title {
+            border-left: none;
+        }
     }
 
     .event-table-cell {
@@ -221,15 +227,21 @@ $table-mragin: 20px;
         }
     }
 
+    .arrow-down {
+        height: 4px;
+        margin-right: 3px;
+        width: 7.5px;
+    }
+
     .table-sort-title  {
         flex-direction: row;
         align-items: center;
         justify-content: flex-start;
 
         img {
-            height: 4px;
-            margin-right: 3px;
-            width: 7.5px;
+            // height: 4px;
+            // margin-right: 3px;
+            // width: 7.5px;
             transition: transform .3s;
             &.down {
                 transform: rotate(180deg);
