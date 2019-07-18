@@ -4,8 +4,18 @@
             <div id="toolbar"></div>
             <div id="editor"></div>
             <div class="flex">
-                <div class="btn send-btn" @click="submitText">
+                <!-- <div class="btn send-btn" @click="submitText">
                     {{ $route.params.messageKey ? 'עדכן' : 'פרסם' }} באפליקציה
+                </div> -->
+                <div class="btn-wrapper">
+                    <AsyncBtn 
+                        ref="asyncBtn"
+                        @btn-clicked="submitText" 
+                        :label="$route.params.messageKey ? 'עדכן באפליקציה' : 'פרסם באפליקציה'" 
+                        width="272px"
+                        height="45px"
+                        fontSize="14px"
+                    />
                 </div>
             </div>
         </div>
@@ -14,9 +24,11 @@
 
 <script>
 import Quill from 'quill';
+import AsyncBtn from '@/components/AsyncBtn';
 
 export default {
     name: 'New-Feed',
+    components: { AsyncBtn },
     data(){
         return {
             editor: null
@@ -67,6 +79,7 @@ export default {
             this.editor.setText('');
         },
         async submitText(){
+            this.$refs.asyncBtn.toggleSpinner(true);
             const message = {
                 publishDate: new Date(),
                 content: document.querySelector('.ql-editor').innerHTML,
@@ -80,6 +93,7 @@ export default {
             } else {
                 res = await this.$store.dispatch('submitMessage', message);
             }
+            this.$refs.asyncBtn.toggleSpinner(false);
             if(res){
                 alert('ההודעה התווספה בהצלחה.');
                 this.$router.push('/news-feed');
@@ -117,7 +131,12 @@ export default {
 //     direction: ltr;
 // }
 
-.send-btn {
+.btn-wrapper {
+    margin-top: 18.5px;
+}
+
+.send-btn,
+.async-btn .big-btn {
     background-color: $app-blue;
     color: #fff;
     padding: 11px 75px;

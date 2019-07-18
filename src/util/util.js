@@ -8,5 +8,6 @@ export default {
         }
         alert('הייתה בעיה בשירות. אנא נסה שוב מאוחר יותר');
         return res;
-    }
+    },
+    copyObject: obj => JSON.parse(JSON.stringify(obj))
 }

@@ -8,6 +8,8 @@ export default {
     //     return res.val();
     // }
     fetchEvents: () => axios.get('https://us-central1-admin-interface-dev.cloudfunctions.net/api/events'),
-    fetchEvent: eventId => axios.get(`https://us-central1-admin-interface-dev.cloudfunctions.net/api/event/${eventId}`),
-    fetchConfig: () => axios.get('https://admin-interface-dev.firebaseio.com/config.json')
+    fetchEvent: eventKey => axios.get(`https://us-central1-admin-interface-dev.cloudfunctions.net/api/event/${eventKey}`),
+    fetchConfig: () => axios.get('https://admin-interface-dev.firebaseio.com/config.json'),
+    updateEvent: (event, eventKey) => axios.put(`https://admin-interface-dev.firebaseio.com/events/${eventKey}.json`, event),
+    createEvent: event => axios.post(`https://admin-interface-dev.firebaseio.com/events.json`, event)
 }

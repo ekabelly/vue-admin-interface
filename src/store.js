@@ -77,8 +77,16 @@ export default new Vuex.Store({
       const res = await eventsService.fetchEvents();
       return util.resHandler(res);
     },
-    async fetchEvent(context, eventId){
-      const res = await eventsService.fetchEvent(eventId);
+    async fetchEvent(context, eventKey){
+      const res = await eventsService.fetchEvent(eventKey);
+      return util.resHandler(res);
+    },
+    async createEvent(context, event){
+      const res = await eventsService.createEvent(event);
+      return util.resHandler(res);
+    },
+    async updateEvent(context, {eventKey, event}){
+      const res = await eventsService.updateEvent(event, eventKey);
       return util.resHandler(res);
     },
     async fetchMessages(){
