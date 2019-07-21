@@ -28,18 +28,19 @@ export default {
                 callbacks: {
                     signInSuccessWithAuthResult: async authResult => {
                         console.log('user login successful!', authResult);
-                        const adminsArr = await this.$store.dispatch('fetchAdmins');
+                        // const adminsArr = await this.$store.dispatch('fetchAdmins');
                         // debugger;
-                        if(adminsArr.includes(authResult.additionalUserInfo.profile.email)){
-                            this.$store.commit('setUser', {
-                                displayName: authResult.additionalUserInfo.profile.name,
-                            email: authResult.additionalUserInfo.profile.email 
-                        });
+                        // if(adminsArr.includes(authResult.additionalUserInfo.profile.email)){
+                        //     this.$store.commit('setUser', {
+                        //         displayName: authResult.additionalUserInfo.profile.name,
+                        //     email: authResult.additionalUserInfo.profile.email 
+                        // });
+                        await this.$store.dispatch('login', authResult);
                         this.$emit('input', true);
-                        } else {
-                            alert('משתמש לא מורשה.');
-                            this.$store.dispatch('logout');
-                        }
+                        // } else {
+                        //     alert('משתמש לא מורשה.');
+                        //     this.$store.dispatch('logout');
+                        // }
                     },
                     uiShown: function() {
                         // The widget is rendered.

@@ -61,18 +61,35 @@ export default new Vuex.Store({
     }
   },
   actions: {
-    logout: context => {
+    logout: async context => {
       context.dispatch('cleanState');
-      firebase.auth().signOut();
+      await firebase.auth().signOut().catch(err => alert('הייתה בעיה בהתנתקות.', err));
       window.location.href = '';
     },
     cleanState(context){
       context.commit('setUser', null);
     },
-    async fetchAdmins(){
-      const res = await adminService.fetchAdmins();
+    async login(context, googleRes){
+      const email = googleRes.additionalUserInfo.profile.email;
+      const res = await adminService.login({ email, uid: googleRes.user.uid });
+      if(res.data && res.data.token){
+        firebase.auth().signInWithCustomToken(res.data.token).catch(error =>
+          console.error(error));
+        let token = await firebase.auth().currentUser.getIdToken(true);
+        await adminService.setCustomClaims(token);
+        token = await firebase.auth().currentUser.getIdToken(true);
+        context.commit('setUser', {
+          displayName: googleRes.additionalUserInfo.profile.name,
+          email,
+          token
+        });
+      }
       return util.resHandler(res);
     },
+    // async fetchAdmins(){
+    //   const res = await adminService.fetchAdmins();
+    //   return util.resHandler(res);
+    // },
     async fetchEvents(){
       const res = await eventsService.fetchEvents();
       return util.resHandler(res);
