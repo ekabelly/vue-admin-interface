@@ -62,8 +62,8 @@ export default new Vuex.Store({
   },
   actions: {
     logout: async context => {
-      context.dispatch('cleanState');
       await firebase.auth().signOut().catch(err => alert('הייתה בעיה בהתנתקות.', err));
+      context.dispatch('cleanState');
       window.location.href = '';
     },
     cleanState(context){
