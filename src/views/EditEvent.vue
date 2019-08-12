@@ -322,7 +322,7 @@ export default {
     }
 
     .edit-event-content {
-        width: 70%;
+        width: 75%;
         padding-right: 2px;
     }
 
