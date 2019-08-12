@@ -1,6 +1,6 @@
 <template>
     <div class="side-nav">
-        <div class="logo border-bottom">
+        <div @click="$router.push('/events')" class="logo border-bottom pointer">
             <img src="@/assets/img/logo.png" alt="">
         </div>
         <router-link to="/event">
@@ -8,12 +8,12 @@
                 יצירת אירוע חדש
             </div>
         </router-link>
-        <div class="side-nav-btn border-bottom flex align-center justify-center">
+        <div class="disabled side-nav-btn border-bottom flex align-center justify-center">
             <div>
                 אירועים פעילים
             </div>
         </div>
-        <div class="side-nav-btn border-bottom flex align-center justify-center">
+        <div class="disabled side-nav-btn border-bottom flex align-center justify-center">
             <div>
                 ארכיון אירועים
             </div>
@@ -58,6 +58,10 @@ $navbar-height: 55px;
     .side-nav-btn {
         font-size: 16px;
         color: black;
+        &.disabled {
+            color: $border-color;
+            cursor: default;
+        }
     }
 
     .create-new-event {

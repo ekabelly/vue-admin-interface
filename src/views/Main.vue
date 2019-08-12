@@ -11,7 +11,7 @@
                 class="btns-container flex" 
                 :class="{ 'justify-center': $route.name !== appConfig.routes.eventsTable && $store.getters.isMobile }"
             >
-                <div class="btn volunteers-btn">
+                <div class="btn volunteers-btn disabled">
                    מתנדבים
                 </div>
                 <!-- <div class="btn general-messages">
@@ -106,6 +106,10 @@ export default {
         border: 1px solid $app-blue;
         cursor: pointer;
         transition: background-color .3s;
+
+        &.disabled {
+            cursor: default;
+        }
         
         
         &.events {
@@ -120,6 +124,9 @@ export default {
             &.router-link-active {
                 background-color: $app-blue;
                 color: #fff;
+            }
+            &.disabled {
+                color: $border-color;
             }
         }
         
