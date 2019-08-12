@@ -1,5 +1,5 @@
 import axios from 'axios';
-import appApi from '../config/app-api.json';
+import appApi from '../config/app-api.json5';
 
 export default {
     submitMessage:  message => axios.post('https://admin-interface-dev.firebaseio.com/newsFeed.json', message),

@@ -1,5 +1,5 @@
 import axios from 'axios';
-import appApi from '../config/app-api.json';
+import appApi from '../config/app-api.json5';
 
 export default {
     fetchConfig: () => axios.get('https://admin-interface-dev.firebaseio.com/config.json'),
