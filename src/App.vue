@@ -8,7 +8,7 @@
         <app-navbar />
           <router-view  />
       </div>
-      <div class="side-nav">
+      <div class="side-nav-container">
         <app-sidenav />
       </div>
     </div>
@@ -36,8 +36,13 @@ export default {
 
 
 <style lang="scss" scoped>
-  .side-nav {
+@import '@/assets/scss/style.scss';
+
+  .side-nav-container {
     width: 18vw;
+    border-left: 1px solid $border-color;
+    box-sizing: border-box;
+    height: 100vh;
   }
 
   .content {

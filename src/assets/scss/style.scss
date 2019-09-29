@@ -129,7 +129,7 @@ $medium-spinner-size: 40px;
 
 #app {
   font-family: 'Heebo', sans-serif;
-  overflow: hidden;
+  // overflow: hidden;
 
   @media (max-width: 768px) {
     overflow: auto;

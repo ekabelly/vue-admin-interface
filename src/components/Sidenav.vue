@@ -35,7 +35,7 @@ $navbar-height: 55px;
         // padding-top: $navbar-height;
         // width: 25vw;
         background-color: #fff;
-        border-left: 1px solid $border-color;
+        // border-left: 1px solid $border-color;
         height: -webkit-fill-available;
         a, div {
             text-align: center;

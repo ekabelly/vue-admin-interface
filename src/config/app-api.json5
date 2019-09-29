@@ -1,4 +1,4 @@
 {
     // "serverUrl":"https://us-central1-admin-interface-dev.cloudfunctions.net"
-    "serverUrl":"http://localhost:8010/1/us-central1"
+    "serverUrl":"http://localhost:8010/d/us-central1"
 }
