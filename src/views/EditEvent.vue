@@ -194,7 +194,8 @@
                 </div> -->
                 <AsyncBtn 
                     ref="asyncBtn"
-                    @btn-clicked="handleSubmit" 
+                    @btn-clicked="handleSubmit"
+                    :inactive="!validForm"
                     label="פרסם באפליקציה" 
                     width="422px" 
                 />
@@ -228,6 +229,22 @@ export default {
             this.setComponenetData();
         }
     },
+    computed: {
+        validForm(){
+            const { event } = this;
+            if(!event.title || event.title.length < 1){
+                return false;
+            }
+            if(!event.volunteersTypes || event.volunteersTypes.length < 1){
+                return false;
+            }
+            if(!event.locations || event.locations.length < 1 || 
+            !(event.locations.every(location => location.city && location.city.length > 0))){
+                return false;
+            }
+            return true;
+        }
+    },
     mounted(){
         this.setComponenetData();
     },
@@ -255,8 +272,28 @@ export default {
         handleAyncBtn(){
             this.$refs.asyncBtn.toggleSpinner(true);
         },
+        validFormNotifyUser(){
+            const { event } = this;
+            if(!event.title || event.title.length < 1){
+                alert('חובה לתת כותרת לאירוע');
+                return false;
+            }
+            if(!event.volunteersTypes || event.volunteersTypes.length < 1){
+                alert('חובה לבחור סוג מתנדבים');
+                return false;
+            }
+            if(!event.locations || event.locations.length < 1 || 
+            !(event.locations.every(location => location.city && location.city.length > 0))){
+                alert('חובה לציין לפחות עיר לכל מיקום');
+                return false;
+            }
+            return true;
+        },
         async handleSubmit(){
-            console.log('submit');
+            // console.log('submit');
+            if(!this.validFormNotifyUser()){
+                return;
+            }
             this.handleAyncBtn();
             let res;
             if(this.eventKey){

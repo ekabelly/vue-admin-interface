@@ -68,6 +68,9 @@ a {
   display: flex;
   justify-content: center;
   align-items: center;
+  &.disabled, &.inactive {
+    background-color: $border-color;
+  }
 }
 
 $medium-spinner-size: 40px;
