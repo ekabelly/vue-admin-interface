@@ -158,31 +158,41 @@
                         </div>
                     </div>
                     <div class="locations margin-top">
-                        <div class="flex location-inputs" v-for="(location, index) in event.locations" :key="index">
-                            <div class="form-group">
-                                <label :for="'city' + index">עיר</label>
+                        <div class="location-inputs" v-for="(location, index) in event.locations" :key="index">
+                            <div class="form-group location-desc">
+                                <label :for="'desc' + index">  תיאור כתובת {{ index === 0 ? 'מוצא' : '' }}</label>
                                 <input 
-                                    @blur="updateLocations($event, 'city', index)" 
-                                    :id="'city' + index" 
-                                    type="text" :value="location.city"
+                                    @blur="updateLocations($event, 'desc', index)" 
+                                    :id="'desc' + index" 
+                                    type="text" :value="location.desc"
                                 >
                             </div>
-                            <div class="form-group">
-                                <label :for="'street' + index">רחוב</label>
-                                <input 
-                                    @blur="updateLocations($event, 'street', index)" 
-                                    :id="'street' + index" type="text" 
-                                    :value="location.street"
-                                >
-                            </div>
-                            <div class="form-group">
-                                <label :for="'houseNum' + index">מספר בית (לא חובה)</label>
-                                <input 
-                                    @blur="updateLocations($event, 'houseNum', index)" 
-                                    class="houseNum" 
-                                    :id="'houseNum' + index" 
-                                    type="number" :value="location.houseNum"
-                                >
+                            <div class="flex">
+                                <div class="form-group">
+                                    <label :for="'city' + index"> עיר {{ index === 0 ? 'כתובת מוצא' : '' }}</label>
+                                    <input 
+                                        @blur="updateLocations($event, 'city', index)" 
+                                        :id="'city' + index" 
+                                        type="text" :value="location.city"
+                                    >
+                                </div>
+                                <div class="form-group">
+                                    <label :for="'street' + index">רחוב</label>
+                                    <input 
+                                        @blur="updateLocations($event, 'street', index)" 
+                                        :id="'street' + index" type="text" 
+                                        :value="location.street"
+                                    >
+                                </div>
+                                <div class="form-group">
+                                    <label :for="'houseNum' + index">מספר בית (לא חובה)</label>
+                                    <input 
+                                        @blur="updateLocations($event, 'houseNum', index)" 
+                                        class="houseNum" 
+                                        :id="'houseNum' + index" 
+                                        type="number" :value="location.houseNum"
+                                    >
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -359,7 +369,7 @@ export default {
     }
 
     .edit-event-content {
-        width: 75%;
+        width: 90%;
         padding-right: 2px;
     }
 
@@ -480,7 +490,17 @@ export default {
     }
 
     .form-group {
+        input {
+            width: 90%;
+        }
         margin-right: $margin;
+        &.location-desc {
+            margin-bottom: $margin;
+            input {
+                width: 50%;
+            }
+        }
+
         input.houseNum {
             width: 50px;
         }
