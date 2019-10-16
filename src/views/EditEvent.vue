@@ -198,6 +198,17 @@
                     </div>
                 </div>
             </section>
+            <section class="section">
+                <div class="section-title">
+                    פרטי התקשרות
+                </div>
+                <div class="flex form-group contact">
+                    <label for="phone">טלפון</label>
+                    <input v-model="event.contact.phone" type="number" id="phone">
+                    <label for="mobile">טלפון נייד</label>
+                    <input v-model="event.contact.mobile" type="number" id="mobile">
+                </div>
+            </section>
             <section class="flex flex-end">
                 <!-- <div @click="handleSubmit" class="publish-btn flex justify-center align-center pointer">
                     פרסם באפליקציה
@@ -482,7 +493,7 @@ export default {
         margin-right: $margin;
     }
     
-    .time, .duration, .location-inputs {
+    .time, .duration, .location-inputs, .contact {
         margin-top: $margin;
         input {
             margin-right: $margin / 2;
@@ -490,9 +501,6 @@ export default {
     }
 
     .form-group {
-        input {
-            width: 90%;
-        }
         margin-right: $margin;
         &.location-desc {
             margin-bottom: $margin;
@@ -504,5 +512,19 @@ export default {
         input.houseNum {
             width: 50px;
         }
+
+        label {
+            display: flex;
+            align-items: center;
+            // width: 20%;
+        }
+    }
+
+    .contact {
+        input[type=number]::-webkit-inner-spin-button, 
+        input[type=number]::-webkit-outer-spin-button { 
+            -webkit-appearance: none; 
+            margin: 0; 
+            }
     }
 </style>
