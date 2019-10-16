@@ -159,7 +159,8 @@
                     </div>
                     <div class="locations margin-top">
                         <div class="location-inputs" v-for="(location, index) in event.locations" :key="index">
-                            <div class="form-group location-desc">
+                            <div class="hr" v-if="index !== 0"></div>
+                            <div class="form-group flex location-desc">
                                 <label :for="'desc' + index">  תיאור כתובת {{ index === 0 ? 'מוצא' : '' }}</label>
                                 <input 
                                     @blur="updateLocations($event, 'desc', index)" 
@@ -168,7 +169,7 @@
                                 >
                             </div>
                             <div class="flex">
-                                <div class="form-group">
+                                <div class="form-group flex">
                                     <label :for="'city' + index"> עיר {{ index === 0 ? 'כתובת מוצא' : '' }}</label>
                                     <input 
                                         @blur="updateLocations($event, 'city', index)" 
@@ -176,7 +177,7 @@
                                         type="text" :value="location.city"
                                     >
                                 </div>
-                                <div class="form-group">
+                                <div class="form-group flex">
                                     <label :for="'street' + index">רחוב</label>
                                     <input 
                                         @blur="updateLocations($event, 'street', index)" 
@@ -184,7 +185,7 @@
                                         :value="location.street"
                                     >
                                 </div>
-                                <div class="form-group">
+                                <div class="form-group flex">
                                     <label :for="'houseNum' + index">מספר בית (לא חובה)</label>
                                     <input 
                                         @blur="updateLocations($event, 'houseNum', index)" 
@@ -526,5 +527,13 @@ export default {
             -webkit-appearance: none; 
             margin: 0; 
             }
+    }
+
+    .hr {
+        margin: $margin auto;
+        width: 95%;
+        // border-bottom: 1px solid black;
+        box-shadow: 0px 1px 1px 0 rgba(0, 0, 0, 0.17);
+        height: 1px;
     }
 </style>
