@@ -215,12 +215,46 @@
                     תווית ומידע נוסף
                 </div>
                 <div class="vehicles flex">
-                    <div>
+                    <div class="vehicles-label">
                         כלי רכב 
                     </div>
-                    <div class="vehicle pointer" v-for="(vehicle, index) of config.vehicles" :key="index" :class="{ selected: event.vehicles.includes(index) }">
-                        {{ vehicle.translation }} {{ index }}
+                    <div 
+                        class="vehicle pointer" 
+                        v-for="(vehicle, key) of config.vehicles"
+                        :key="key" 
+                        :class="{ selected: event.vehicles.includes(key) }"
+                        @click="toggleVehicleOrTags('vehicles', key)"
+                    >
+                        {{ vehicle.translation }}
                     </div>
+                </div>
+                <div class="tags flex">
+                    <div class="tags-label">
+                        תגיות 
+                    </div>
+                    <div class="flex flex-column">
+                        <input type="text" v-model="newTag" class="add-tag-input">
+                        <div class="flex flex-wrap">
+                            <div 
+                                class="tag pointer" 
+                                v-for="(tag, key) of config.tags"
+                                :key="key" 
+                                :class="{ selected: event.tags.includes(key) }"
+                                @click="toggleVehicleOrTags('tags', key)"
+                            >
+                                {{ tag.translation }}
+                            </div>
+                        </div>
+                    </div>
+                    <AsyncBtn
+                        class="add-tag"
+                        font-size="16px"
+                        height="fit-content"
+                        ref="addTag"
+                        @btn-clicked="addTag"
+                        label="הוספת תגית" 
+                        width="150px" 
+                    />
                 </div>
             </section>
             <section class="flex flex-end">
@@ -256,6 +290,7 @@ export default {
             config: null,
             eventKey: null,
             tab: 1,
+            newTag: '',
             event: {}
         }
     },
@@ -295,6 +330,13 @@ export default {
             this.config = data[0];
             this.event = data[1] || util.copyObject(defualtEvent);
             this.isData = true;
+            // this.config.tags = { ...this.config.tags,
+            //     fds22: {name: 'dsafdsf',translation: 'fdsf'},
+            //     f4:{name: 'dsafdsf',translation: 'fdsf'},
+            //     fdsf34:{name: 'dsafdsf',translation: 'fdsf'},
+            //     hg44:{name: 'dsafdsf',translation: 'fdsf'},
+            //     f423:{name: 'dsafdsf',translation: 'fdsf'}
+            // };
             console.log({ config: this.config, event: this.event });
         },
         toggleVolunteeringType(type){
@@ -376,6 +418,24 @@ export default {
         },
         updateLocations(e, property, index){
             this.event.locations[index][property] = e.target.value;
+        },
+        toggleVehicleOrTags(itemType, itemKey){
+            let itemsSet = new Set()
+            if(this.event[itemType]){
+                itemsSet = new Set(this.event[itemType]);
+            }
+            if(itemsSet.has(itemKey)){
+                itemsSet.delete(itemKey);
+            } else {
+                itemsSet.add(itemKey);
+            }
+            this.event[itemType] = [...itemsSet];
+        },
+        async addTag(){
+            this.$refs.addTag.toggleSpinner(true);
+            await this.$store.dispatch('addTag', this.newTag);
+            this.config = await this.$store.dispatch('fetchConfig', this.newTag);
+            this.$refs.addTag.toggleSpinner(false);
         }
     }
 }
@@ -550,19 +610,37 @@ export default {
         height: 1px;
     }
 
-    .vehicles {
-        div {
+    .vehicles-label, .tags-label {
+        width: 70px;
+    }
+
+    .vehicles, .tags {
+        .vehicles-label, .tags-label, .vehicle, .tag {
             margin: 10px;
             padding: 5px 10px;
-            &.vehicle {
-                border: 0.6px solid black;
-                border-radius: 2.5px;
-                &.selected {
-                    background-color: $light-blue;
-                    border: 0.6px solid $deep-blue;
-                    color: $deep-blue;
-                }
+        }
+
+        .vehicle, .tag {
+            border: 0.6px solid black;
+            border-radius: 2.5px;
+            &.selected {
+                background-color: $light-blue;
+                border: 0.6px solid $deep-blue;
+                color: $deep-blue;
             }
         }
+    }
+
+    input.add-tag-input {
+        margin: 10px;
+    }
+</style>
+<style lang="scss">
+@import '@/assets/scss/style.scss';
+    .async-btn.add-tag div  {
+        border: 1px solid $app-blue;
+        color: $app-blue;
+        background-color: #fff;
+        padding: 5px 0;
     }
 </style>

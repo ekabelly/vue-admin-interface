@@ -126,8 +126,12 @@ export default new Vuex.Store({
       const res = await messagesService.deleteMessage(messageKey);
       return util.resHandler(res);
     },
-    async fetchConfig(context){
+    async fetchConfig(){
       const res = await eventsService.fetchConfig();
+      return util.resHandler(res);
+    },
+    async addTag(context, tag){
+      const res = await eventsService.addTag({translation: tag});
       return util.resHandler(res);
     }
   },
