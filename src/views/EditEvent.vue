@@ -93,8 +93,8 @@
                     <input id="title" maxlength="50" v-model="event.title"  type="text">
                 </div>
                 <div class="desc">
-                    <label for="desc">תיאור התנדבות (עד 50 תווים)</label>
-                    <input id="desc" maxlength="50" v-model="event.desc" type="text">
+                    <label for="desc">תיאור התנדבות</label>
+                    <input id="desc" v-model="event.desc" type="text">
                 </div>
             </section>
             <section class="section">
@@ -160,14 +160,6 @@
                     <div class="locations margin-top">
                         <div class="location-inputs" v-for="(location, index) in event.locations" :key="index">
                             <div class="hr" v-if="index !== 0"></div>
-                            <div class="form-group flex location-desc">
-                                <label :for="'desc' + index">  תיאור כתובת {{ index === 0 ? 'מוצא' : '' }}</label>
-                                <input 
-                                    @blur="updateLocations($event, 'desc', index)" 
-                                    :id="'desc' + index" 
-                                    type="text" :value="location.desc"
-                                >
-                            </div>
                             <div class="flex">
                                 <div class="form-group flex">
                                     <label :for="'city' + index"> עיר {{ index === 0 ? 'כתובת מוצא' : '' }}</label>
@@ -195,6 +187,14 @@
                                     >
                                 </div>
                             </div>
+                            <div class="form-group flex location-desc">
+                                <label :for="'desc' + index">  תיאור כתובת {{ index === 0 ? 'מוצא' : '' }}</label>
+                                <input 
+                                    @blur="updateLocations($event, 'desc', index)" 
+                                    :id="'desc' + index" 
+                                    type="text" :value="location.desc"
+                                >
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -208,6 +208,19 @@
                     <input v-model="event.contact.phone" type="number" id="phone">
                     <label for="mobile">טלפון נייד</label>
                     <input v-model="event.contact.mobile" type="number" id="mobile">
+                </div>
+            </section>
+            <section class="section">
+                <div class="section-title">
+                    תווית ומידע נוסף
+                </div>
+                <div class="vehicles flex">
+                    <div>
+                        כלי רכב 
+                    </div>
+                    <div class="vehicle pointer" v-for="(vehicle, index) of config.vehicles" :key="index" :class="{ selected: event.vehicles.includes(index) }">
+                        {{ vehicle.translation }} {{ index }}
+                    </div>
                 </div>
             </section>
             <section class="flex flex-end">
@@ -504,7 +517,7 @@ export default {
     .form-group {
         margin-right: $margin;
         &.location-desc {
-            margin-bottom: $margin;
+            margin-top: $margin;
             input {
                 width: 50%;
             }
@@ -535,5 +548,21 @@ export default {
         // border-bottom: 1px solid black;
         box-shadow: 0px 1px 1px 0 rgba(0, 0, 0, 0.17);
         height: 1px;
+    }
+
+    .vehicles {
+        div {
+            margin: 10px;
+            padding: 5px 10px;
+            &.vehicle {
+                border: 0.6px solid black;
+                border-radius: 2.5px;
+                &.selected {
+                    background-color: $light-blue;
+                    border: 0.6px solid $deep-blue;
+                    color: $deep-blue;
+                }
+            }
+        }
     }
 </style>

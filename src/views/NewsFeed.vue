@@ -92,11 +92,13 @@ export default {
                 message.content.includes(text));
         },
         editFeed(event, messageKey){
-            if(event.target.parentElement.classList.contains('delete-cell') ||
-            event.target.classList.contains('delete-cell')){
+            if(event && event.target && !event.target.parentElement ||
+            (event.target.parentElement.classList.contains('delete-cell') ||
+            event.target.classList.contains('delete-cell'))){
                 return;
+            } else {
+                this.$router.push(`/edit-feed/${messageKey}`);
             }
-            this.$router.push(`/edit-feed/${messageKey}`);
         },
         async deleteMessage(messageKey){
             this.loadingBtnKey = messageKey;
