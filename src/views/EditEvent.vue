@@ -2,7 +2,7 @@
     <div class="edit-event" v-if="isData">
         <!-- editing event: {{ eventKey ? eventKey : 'new event' }} -->
         <div class="edit-event-content">
-            <section class="edit-event-header flex">
+            <div class="edit-event-header flex">
                 <div 
                 class="link flex justify-center align-center" 
                 :class="{ active: tab === 1 }"
@@ -12,263 +12,282 @@
                 </div>
                 <div 
                     class="link flex justify-center align-center" 
-                    :class="{ active: tab === 2 }"
-                    @click="tab = 2"
+                    :class="{ active: tab === 2, disabled: !$route.params.id }"
+                    @click="$route.params.id ? tab = 2 : null"
                 >
                     המתנדבים
                 </div>
-            </section>
-
-            <section class="volunteers-details section">
-                <div class="section-title">
-                    פרטי מתנדבים
-                </div>
-                <div class="type-selection margin-top flex align-center">
-                    <div class="option flex align-center" @click="event.type = 1">
-                        <div class="radio flex align-center justify-center">
-                            <div class="circle" :class="{ active: event.type === 1 }"></div>
-                        </div>
-                        מתנדבים רשומים
+            </div>
+            <div v-if="tab === 1">
+                <section class="volunteers-details section">
+                    <div class="section-title">
+                        פרטי מתנדבים
                     </div>
-                    <div class="option flex align-center" @click="event.type = 0">
-                        <div class="radio flex align-center justify-center">
-                            <div class="circle" :class="{ active: event.type === 0 }"></div>
-                        </div>
-                        קהל רחב
-                    </div>
-                </div>
-                <div class="type-selection margin-top flex align-center">
-                    <div class="option flex align-center" @click="toggleVolunteeringType(12)">
-                        <div 
-                            class="square flex align-center justify-center"
-                            :class="{ active: event.volunteersTypes.includes(12) }"
-                        >
-                            <div class="check">
-                                V
-                            </div>
-                        </div>
-                        תומכים
-                    </div>
-                    <div class="option flex align-center" @click="toggleVolunteeringType(11)">
-                        <div 
-                            class="square flex align-center justify-center"
-                            :class="{ active: event.volunteersTypes.includes(11) }"
-                        >
-                            <div class="check">
-                                V
-                            </div>
-                        </div>
-                        פעילים
-                    </div>
-                    <div class="option flex align-center" @click="toggleVolunteeringType(13)">
-                        <div 
-                            class="square flex align-center justify-center"
-                            :class="{ active: event.volunteersTypes.includes(13) }"
-                        >
-                            <div class="check">
-                                V
-                            </div>
-                        </div>
-                        פעילים פלוס
-                    </div>
-                </div>
-                <div class="volunteers-numbers margin-top flex">
-                    <div class="min-volunteers">
-                        מספר מתנדבים מינימלי
-                        <input :min="0" :max="event.volunteers.max" v-model="event.volunteers.min" type="number">
-                    </div>
-                    <div class="max-volunteers">
-                        מספר מתנדבים מקסימלי
-                        <input v-model="event.volunteers.max" type="number">
-                    </div>
-                </div>
-            </section>
-
-            <section class="section">
-                <div class="section-title">
-                    תיאור ההתנדבות
-                </div>
-                <div class="title">
-                    <label for="title">כותרת התנדבות (עד 50 תווים)</label>
-                    <input id="title" maxlength="50" v-model="event.title"  type="text">
-                </div>
-                <div class="desc">
-                    <label for="desc">תיאור התנדבות</label>
-                    <input id="desc" v-model="event.desc" type="text">
-                </div>
-            </section>
-            <section class="section">
-                <div class="section-title">
-                    זמן ומיקום
-                </div>
-                <div class="time flex">
-                    <div class="date">
-                        <label for="date"> תאריך</label>
-                        <input id="date" :value="getDateForInput(event.time.date)" @change="setEventDate" type="date">
-                    </div>
-                    <div class="hour">
-                        <label for="hour"> שעה</label>
-                        <input id="hour" v-model="event.time.time" type="time">
-                    </div>
-                </div>
-                <div class="duration option flex align-center" @click="event.time.duration === 1 ? event.time.duration = 0 : event.time.duration = 1">
-                    <div 
-                        class="square flex align-center justify-center"
-                        :class="{ active: event.time.duration === 1 }"
-                    >
-                        <div class="check">
-                            V
-                        </div>
-                    </div>
-                    התנדבות מתמשכת (יותר מיום אחד)
-                </div>
-                <div class="duration option flex align-center" @click="event.urgent = !event.urgent">
-                    <div 
-                        class="square flex align-center justify-center"
-                        :class="{ active: event.urgent }"
-                    >
-                        <div class="check">
-                            V
-                        </div>
-                    </div>
-                    התנדבות מיידית (ההתנדבות תופיע בראש הרשימע באפליקציה עם תווית מיידי)
-                </div>
-                <div class="location margin-top">
-                    <div class="location-options flex">
-                        <div class="option flex align-center" @click="handleLocationsNum(1)">
+                    <div class="type-selection margin-top flex align-center">
+                        <div class="option flex align-center" @click="event.type = 1">
                             <div class="radio flex align-center justify-center">
-                                <div class="circle" :class="{ active: event.locations.length <= 1 }"></div>
+                                <div class="circle" :class="{ active: event.type === 1 }"></div>
                             </div>
-                            מיקום בודד
+                            מתנדבים רשומים
                         </div>
-                        <div class="option flex align-center" @click="handleLocationsNum(2)">
+                        <div class="option flex align-center" @click="event.type = 0">
                             <div class="radio flex align-center justify-center">
-                                <div class="circle" :class="{ active: event.locations.length === 2 }"></div>
+                                <div class="circle" :class="{ active: event.type === 0 }"></div>
                             </div>
-                            שני מיקומים
-                        </div>
-                        <div class="option flex align-center" @click="handleLocationsNum(3)">
-                            <div class="radio flex align-center justify-center">
-                                <div class="circle" :class="{ active: event.locations.length >= 3 }"></div>
-                            </div>
-                            מספר מיקומים
-                        </div>
-                        <div class="add-location" v-if="event.locations.length >= 3" @click="handleLocationsNum(event.locations.length + 1)">
-                            <div class="btn">הוסף מיקום</div>
+                            קהל רחב
                         </div>
                     </div>
-                    <div class="locations margin-top">
-                        <div class="location-inputs" v-for="(location, index) in event.locations" :key="index">
-                            <div class="hr" v-if="index !== 0"></div>
-                            <div class="flex">
-                                <div class="form-group flex">
-                                    <label :for="'city' + index"> עיר {{ index === 0 ? 'כתובת מוצא' : '' }}</label>
-                                    <input 
-                                        @blur="updateLocations($event, 'city', index)" 
-                                        :id="'city' + index" 
-                                        type="text" :value="location.city"
-                                    >
-                                </div>
-                                <div class="form-group flex">
-                                    <label :for="'street' + index">רחוב</label>
-                                    <input 
-                                        @blur="updateLocations($event, 'street', index)" 
-                                        :id="'street' + index" type="text" 
-                                        :value="location.street"
-                                    >
-                                </div>
-                                <div class="form-group flex">
-                                    <label :for="'houseNum' + index">מספר בית (לא חובה)</label>
-                                    <input 
-                                        @blur="updateLocations($event, 'houseNum', index)" 
-                                        class="houseNum" 
-                                        :id="'houseNum' + index" 
-                                        type="number" :value="location.houseNum"
-                                    >
-                                </div>
-                            </div>
-                            <div class="form-group flex location-desc">
-                                <label :for="'desc' + index">  תיאור כתובת {{ index === 0 ? 'מוצא' : '' }}</label>
-                                <input 
-                                    @blur="updateLocations($event, 'desc', index)" 
-                                    :id="'desc' + index" 
-                                    type="text" :value="location.desc"
-                                >
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </section>
-            <section class="section">
-                <div class="section-title">
-                    פרטי התקשרות
-                </div>
-                <div class="flex form-group contact">
-                    <label for="phone">טלפון</label>
-                    <input v-model="event.contact.phone" type="number" id="phone">
-                    <label for="mobile">טלפון נייד</label>
-                    <input v-model="event.contact.mobile" type="number" id="mobile">
-                </div>
-            </section>
-            <section class="section">
-                <div class="section-title">
-                    תווית ומידע נוסף
-                </div>
-                <div class="vehicles flex">
-                    <div class="vehicles-label">
-                        כלי רכב 
-                    </div>
-                    <div 
-                        class="vehicle pointer" 
-                        v-for="(vehicle, key) of config.vehicles"
-                        :key="key" 
-                        :class="{ selected: event.vehicles.includes(key) }"
-                        @click="toggleVehicleOrTags('vehicles', key)"
-                    >
-                        {{ vehicle.translation }}
-                    </div>
-                </div>
-                <div class="tags flex">
-                    <div class="tags-label">
-                        תגיות 
-                    </div>
-                    <div class="flex flex-column">
-                        <input type="text" v-model="newTag" class="add-tag-input">
-                        <div class="flex flex-wrap">
+                    <div class="type-selection margin-top flex align-center">
+                        <div class="option flex align-center" @click="toggleVolunteeringType(12)">
                             <div 
-                                class="tag pointer" 
-                                v-for="(tag, key) of config.tags"
-                                :key="key" 
-                                :class="{ selected: event.tags.includes(key) }"
-                                @click="toggleVehicleOrTags('tags', key)"
+                                class="square flex align-center justify-center"
+                                :class="{ active: event.volunteersTypes && event.volunteersTypes.includes(12) }"
                             >
-                                {{ tag.translation }}
+                                <div class="check">
+                                    V
+                                </div>
+                            </div>
+                            תומכים
+                        </div>
+                        <div class="option flex align-center" @click="toggleVolunteeringType(11)">
+                            <div 
+                                class="square flex align-center justify-center"
+                                :class="{ active: event.volunteersTypes && event.volunteersTypes.includes(11) }"
+                            >
+                                <div class="check">
+                                    V
+                                </div>
+                            </div>
+                            פעילים
+                        </div>
+                        <div class="option flex align-center" @click="toggleVolunteeringType(13)">
+                            <div 
+                                class="square flex align-center justify-center"
+                                :class="{ active: event.volunteersTypes && event.volunteersTypes.includes(13) }"
+                            >
+                                <div class="check">
+                                    V
+                                </div>
+                            </div>
+                            פעילים פלוס
+                        </div>
+                    </div>
+                    <div class="volunteers-numbers margin-top flex">
+                        <div class="min-volunteers">
+                            מספר מתנדבים מינימלי
+                            <input :min="0" :max="event.volunteers.max" v-model="event.volunteers.min" type="number">
+                        </div>
+                        <div class="max-volunteers">
+                            מספר מתנדבים מקסימלי
+                            <input v-model="event.volunteers.max" type="number">
+                        </div>
+                    </div>
+                </section>
+
+                <section class="section">
+                    <div class="section-title">
+                        תיאור ההתנדבות
+                    </div>
+                    <div class="title">
+                        <label for="title">כותרת התנדבות (עד 50 תווים)</label>
+                        <input id="title" maxlength="50" v-model="event.title"  type="text">
+                    </div>
+                    <div class="desc">
+                        <label for="desc">תיאור התנדבות</label>
+                        <input id="desc" v-model="event.desc" type="text">
+                    </div>
+                </section>
+                <section class="section">
+                    <div class="section-title">
+                        זמן ומיקום
+                    </div>
+                    <div class="time flex">
+                        <div class="date">
+                            <label for="date"> תאריך</label>
+                            <input id="date" :value="getDateForInput(event.time.date)" @change="setEventDate" type="date">
+                        </div>
+                        <div class="hour">
+                            <label for="hour"> שעה</label>
+                            <input id="hour" v-model="event.time.time" type="time">
+                        </div>
+                    </div>
+                    <div class="duration option flex align-center" @click="event.time.duration === 1 ? event.time.duration = 0 : event.time.duration = 1">
+                        <div 
+                            class="square flex align-center justify-center"
+                            :class="{ active: event.time.duration === 1 }"
+                        >
+                            <div class="check">
+                                V
+                            </div>
+                        </div>
+                        התנדבות מתמשכת (יותר מיום אחד)
+                    </div>
+                    <div class="duration option flex align-center" @click="event.urgent = !event.urgent">
+                        <div 
+                            class="square flex align-center justify-center"
+                            :class="{ active: event.urgent }"
+                        >
+                            <div class="check">
+                                V
+                            </div>
+                        </div>
+                        התנדבות מיידית (ההתנדבות תופיע בראש הרשימע באפליקציה עם תווית מיידי)
+                    </div>
+                    <div class="location margin-top">
+                        <div class="location-options flex">
+                            <div class="option flex align-center" @click="handleLocationsNum(1)">
+                                <div class="radio flex align-center justify-center">
+                                    <div class="circle" :class="{ active: event.locations.length <= 1 }"></div>
+                                </div>
+                                מיקום בודד
+                            </div>
+                            <div class="option flex align-center" @click="handleLocationsNum(2)">
+                                <div class="radio flex align-center justify-center">
+                                    <div class="circle" :class="{ active: event.locations.length === 2 }"></div>
+                                </div>
+                                שני מיקומים
+                            </div>
+                            <div class="option flex align-center" @click="handleLocationsNum(3)">
+                                <div class="radio flex align-center justify-center">
+                                    <div class="circle" :class="{ active: event.locations.length >= 3 }"></div>
+                                </div>
+                                מספר מיקומים
+                            </div>
+                            <div class="add-location" v-if="event.locations.length >= 3" @click="handleLocationsNum(event.locations.length + 1)">
+                                <div class="btn">הוסף מיקום</div>
+                            </div>
+                        </div>
+                        <div class="locations margin-top">
+                            <div class="location-inputs" v-for="(location, index) in event.locations" :key="index">
+                                <div class="hr" v-if="index !== 0"></div>
+                                <div class="flex">
+                                    <div class="form-group flex">
+                                        <label :for="'city' + index"> עיר {{ index === 0 ? 'כתובת מוצא' : '' }}</label>
+                                        <input 
+                                            @blur="updateLocations($event, 'city', index)" 
+                                            :id="'city' + index" 
+                                            type="text" :value="location.city"
+                                        >
+                                    </div>
+                                    <div class="form-group flex">
+                                        <label :for="'street' + index">רחוב</label>
+                                        <input 
+                                            @blur="updateLocations($event, 'street', index)" 
+                                            :id="'street' + index" type="text" 
+                                            :value="location.street"
+                                        >
+                                    </div>
+                                    <div class="form-group flex">
+                                        <label :for="'houseNum' + index">מספר בית (לא חובה)</label>
+                                        <input 
+                                            @blur="updateLocations($event, 'houseNum', index)" 
+                                            class="houseNum" 
+                                            :id="'houseNum' + index" 
+                                            type="number" :value="location.houseNum"
+                                        >
+                                    </div>
+                                </div>
+                                <div class="form-group flex location-desc">
+                                    <label :for="'desc' + index">  תיאור כתובת {{ index === 0 ? 'מוצא' : '' }}</label>
+                                    <input 
+                                        @blur="updateLocations($event, 'desc', index)" 
+                                        :id="'desc' + index" 
+                                        type="text" :value="location.desc"
+                                    >
+                                </div>
                             </div>
                         </div>
                     </div>
-                    <AsyncBtn
-                        class="add-tag"
-                        font-size="16px"
-                        height="fit-content"
-                        ref="addTag"
-                        @btn-clicked="addTag"
-                        label="הוספת תגית" 
-                        width="150px" 
+                </section>
+                <section class="section">
+                    <div class="section-title">
+                        פרטי התקשרות
+                    </div>
+                    <div class="flex form-group contact">
+                        <label for="phone">טלפון</label>
+                        <input v-model="event.contact.phone" type="number" id="phone">
+                        <label for="mobile">טלפון נייד</label>
+                        <input v-model="event.contact.mobile" type="number" id="mobile">
+                    </div>
+                </section>
+                <section class="section">
+                    <div class="section-title">
+                        תווית ומידע נוסף
+                    </div>
+                    <div class="vehicles flex">
+                        <div class="vehicles-label">
+                            כלי רכב 
+                        </div>
+                        <div 
+                            class="vehicle pointer" 
+                            v-for="(vehicle, key) of config.vehicles"
+                            :key="key" 
+                            :class="{ selected: event.vehicles && event.vehicles.includes(key) }"
+                            @click="toggleVehicleOrTags('vehicles', key)"
+                        >
+                            {{ vehicle.translation }}
+                        </div>
+                    </div>
+                    <div class="tags flex">
+                        <div class="tags-label">
+                            תגיות 
+                        </div>
+                        <div class="flex flex-column">
+                            <input type="text" v-model="newTag" class="add-tag-input">
+                            <div class="flex flex-wrap">
+                                <div 
+                                    class="tag pointer" 
+                                    v-for="(tag, key) of config.tags"
+                                    :key="key" 
+                                    :class="{ selected: event.tags && event.tags.includes(key) }"
+                                    @click="toggleVehicleOrTags('tags', key)"
+                                >
+                                    {{ tag.translation }}
+                                </div>
+                            </div>
+                        </div>
+                        <AsyncBtn
+                            class="add-tag"
+                            font-size="16px"
+                            height="fit-content"
+                            ref="addTag"
+                            @btn-clicked="addTag"
+                            label="הוספת תגית" 
+                            width="150px" 
+                        />
+                    </div>
+                </section>
+                <section class="flex flex-end">
+                    <!-- <div @click="handleSubmit" class="publish-btn flex justify-center align-center pointer">
+                        פרסם באפליקציה
+                    </div> -->
+                    <AsyncBtn 
+                        ref="asyncBtn"
+                        @btn-clicked="handleSubmit"
+                        :inactive="!validForm"
+                        label="פרסם באפליקציה" 
+                        width="422px" 
                     />
+                </section>
+            </div>
+            <div v-if="tab === 2">
+                <div>
+                    <div>
+                        assigned volunteers
+                    </div>
+                    <div class="volunteer" v-for="volunteer of event.assignedVolunteers" :key="volunteer">
+                        {{ volunteer }}
+                    </div>
                 </div>
-            </section>
-            <section class="flex flex-end">
-                <!-- <div @click="handleSubmit" class="publish-btn flex justify-center align-center pointer">
-                    פרסם באפליקציה
-                </div> -->
-                <AsyncBtn 
-                    ref="asyncBtn"
-                    @btn-clicked="handleSubmit"
-                    :inactive="!validForm"
-                    label="פרסם באפליקציה" 
-                    width="422px" 
-                />
-            </section>
+                <div>
+                    <div>
+                        backup volunteers
+                    </div>
+                <div class="volunteer" v-for="volunteer of event.backupVolunteers" :key="volunteer">
+                    {{ volunteer }}
+                </div>
+                </div>
+            </div>
         </div>
     </div>
 </template>
@@ -430,6 +449,7 @@ export default {
                 itemsSet.add(itemKey);
             }
             this.event[itemType] = [...itemsSet];
+            this.$forceUpdate();
         },
         async addTag(){
             this.$refs.addTag.toggleSpinner(true);
@@ -472,6 +492,10 @@ export default {
                 border-bottom: $active-color 2px solid;
                 color: $active-color;
                 font-weight: bold;
+            }
+
+            &.disabled {
+                color: $border-color;
             }
         }
     }
