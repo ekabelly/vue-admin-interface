@@ -8,6 +8,7 @@ import eventsService from './services/events-service';
 import messagesService from './services/messages-service';
 import util from './util/util';
 import adminService from './services/admin-service';
+import appGeneralServices from './services/app-general-services';
 
 Vue.use(Vuex);
 
@@ -84,6 +85,10 @@ export default new Vuex.Store({
           token
         });
       }
+      return util.resHandler(res);
+    },
+    async fetchVolunteers(usersKeysList){
+      const res = await appGeneralServices.fetchUsers(usersKeysList);
       return util.resHandler(res);
     },
     // async fetchAdmins(){

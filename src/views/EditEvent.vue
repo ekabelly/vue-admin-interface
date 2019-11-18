@@ -348,7 +348,14 @@ export default {
             const data = await Promise.all([config, event]);
             this.config = data[0];
             this.event = data[1] || util.copyObject(defualtEvent);
+            if(!this.event.vehicles){
+                this.event.vehicles = [];
+            }
+            if(!this.event.tags){
+                this.event.tags = [];
+            }
             this.isData = true;
+            this.handleEventVolunteers(event);
             // this.config.tags = { ...this.config.tags,
             //     fds22: {name: 'dsafdsf',translation: 'fdsf'},
             //     f4:{name: 'dsafdsf',translation: 'fdsf'},
@@ -357,6 +364,15 @@ export default {
             //     f423:{name: 'dsafdsf',translation: 'fdsf'}
             // };
             console.log({ config: this.config, event: this.event });
+        },
+        async handleEventVolunteers(event){
+            event = event || this.event;
+            const volunteersList = await this.$store.dispath('fetchVolunteers', [
+                ...Object.values(event.backupVolunteers || [])
+                , ...Object.values(event.assignedVolunteers || [])
+            ]);
+            console.log(volunteersList);
+            
         },
         toggleVolunteeringType(type){
             if(this.event.volunteersTypes.includes(type)){
