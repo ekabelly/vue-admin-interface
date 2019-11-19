@@ -10,7 +10,6 @@ export default {
         return res;
     },
     errHandler: err => {
-        console.log('login error: ' + err);
         let msg = 'הייתה בעיה בשירות. אנא נסה שוב מאוחר יותר';
         if(err.response.status === 401){
             msg = 'משתמש זה אינה מורשה להכנס. אנא פנה למנהל אחר שיוסיף אותך לרשימת המשתמשים המורשים.';

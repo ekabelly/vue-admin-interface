@@ -270,23 +270,8 @@
                     />
                 </section>
             </div>
-            <div v-if="tab === 2">
-                <div>
-                    <div>
-                        assigned volunteers
-                    </div>
-                    <div class="volunteer" v-for="volunteer of event.assignedVolunteers" :key="volunteer">
-                        {{ volunteer }}
-                    </div>
-                </div>
-                <div>
-                    <div>
-                        backup volunteers
-                    </div>
-                <div class="volunteer" v-for="volunteer of event.backupVolunteers" :key="volunteer">
-                    {{ volunteer }}
-                </div>
-                </div>
+            <div v-if="tab === 2 && backupVolunteers.length > 0 && assignedVolunteers.length > 0">
+                <ManageVolunteers :event="event" :assignedVolunteers="assignedVolunteers" :backupVolunteers="backupVolunteers" />
             </div>
         </div>
     </div>
@@ -295,13 +280,15 @@
 <script>
 import defualtEvent from '@/config/default-event';
 import util from '@/util/util';
+import ManageVolunteers from '../components/ManageVolunteers';
 import AsyncBtn from '@/components/AsyncBtn';
 import moment from 'moment';
 
 export default {
     name: 'editEvent',
     components: {
-        AsyncBtn
+        AsyncBtn,
+        ManageVolunteers
     },
     data(){
         return {
@@ -310,7 +297,9 @@ export default {
             eventKey: null,
             tab: 1,
             newTag: '',
-            event: {}
+            event: {},
+            backupVolunteers: [],
+            assignedVolunteers: []
         }
     },
     watch: {
@@ -340,39 +329,48 @@ export default {
     methods: {
         async setComponenetData(){
             this.eventKey = this.$route.params.id;
-            let event;
+            let eventPromise;
             if(this.eventKey){
-                event = this.$store.dispatch('fetchEvent', this.eventKey);
+                eventPromise = this.$store.dispatch('fetchEvent', this.eventKey);
             }
-            const config = this.$store.dispatch('fetchConfig');
-            const data = await Promise.all([config, event]);
+            const configPromise = this.$store.dispatch('fetchConfig');
+            const data = await Promise.all([configPromise, eventPromise]);
             this.config = data[0];
             this.event = data[1] || util.copyObject(defualtEvent);
-            if(!this.event.vehicles){
-                this.event.vehicles = [];
-            }
-            if(!this.event.tags){
-                this.event.tags = [];
-            }
+            this.event = this.initMissingFields(this.event);
             this.isData = true;
-            this.handleEventVolunteers(event);
-            // this.config.tags = { ...this.config.tags,
-            //     fds22: {name: 'dsafdsf',translation: 'fdsf'},
-            //     f4:{name: 'dsafdsf',translation: 'fdsf'},
-            //     fdsf34:{name: 'dsafdsf',translation: 'fdsf'},
-            //     hg44:{name: 'dsafdsf',translation: 'fdsf'},
-            //     f423:{name: 'dsafdsf',translation: 'fdsf'}
-            // };
+            this.handleEventVolunteers(this.event);
             console.log({ config: this.config, event: this.event });
+        },
+        initMissingFields(event){
+            const mandatoryFields = {'vehicles': [], 'tags': [], 'backupVolunteers': {}, 'assignedVolunteers': {}};
+            for (const field in mandatoryFields) {
+                if(!event[field]){
+                    event[field] = mandatoryFields[field];
+                }
+            }
+            return event;
         },
         async handleEventVolunteers(event){
             event = event || this.event;
-            const volunteersList = await this.$store.dispath('fetchVolunteers', [
+            const volunteersList = await this.$store.dispatch('fetchVolunteers', [
                 ...Object.values(event.backupVolunteers || [])
                 , ...Object.values(event.assignedVolunteers || [])
             ]);
-            console.log(volunteersList);
-            
+            this.assignedVolunteersToLists(volunteersList.filter(volunteer => !!volunteer && !!volunteer.user_id));
+        },
+        assignedVolunteersToLists(volunteersList){
+            console.log({volunteersList});
+            this.backupVolunteers = [];
+            this.assignedVolunteers = [];
+            for (const volunteer of volunteersList) {
+                if(this.event.backupVolunteers[volunteer.user_id]){
+                    this.backupVolunteers.push(volunteer);
+                }
+                if(this.event.assignedVolunteers[volunteer.user_id]){
+                    this.assignedVolunteers.push(volunteer);
+                }
+            }
         },
         toggleVolunteeringType(type){
             if(this.event.volunteersTypes.includes(type)){

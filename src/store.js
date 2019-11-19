@@ -87,7 +87,7 @@ export default new Vuex.Store({
       }
       return util.resHandler(res);
     },
-    async fetchVolunteers(usersKeysList){
+    async fetchVolunteers(context, usersKeysList){
       const res = await appGeneralServices.fetchUsers(usersKeysList);
       return util.resHandler(res);
     },
