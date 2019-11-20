@@ -9,7 +9,7 @@
                 <div class="user-name">
                   {{ `${volunteer.user_name} ${volunteer.user_last_name}` }}
                 </div>
-                <div @click="toggleDropDown(volunteer.user_id)" class="assign" :class="{[`dropdown-${volunteer.user_id}`]: true}">
+                <div @click="toggleDropDown(volunteer.user_id)" class="assign pointer" :class="{[`dropdown-${volunteer.user_id}`]: true}">
                     <div class="flex align-center space-between">
                         <div>
                             צוות
@@ -96,16 +96,26 @@ export default {
     data(){
         return {
             isDropdownOpen: null,
-            dropdownOptions: [{ value:'assigned', display:'צוות' },{ value:'backup', display:'סטנד בי' }, {value:'remove', display:'הסר מההתנדבות'}]
+            dropdownOptions: [{ value:'backup', display:'סטנד בי' }, {value:'REMOVE', display:'הסר מההתנדבות'}]
         }
     },
     methods: {
         toggleDropDown(volunteerId){
-            this.isDropdownOpen = volunteerId;
+            if(volunteerId === this.isDropdownOpen){
+                this.isDropdownOpen = null;
+            } else {
+                this.isDropdownOpen = volunteerId;
+            }
         },
-        handleDropdownClick(selectedValue, volunteerId){
-            console.log({ selectedValue, volunteerId });
+        async handleDropdownClick(selectedValue, userId){
+            // console.log({ selectedValue, volunteerId });
             this.isDropdownOpen = null;
+            if(selectedValue === 'REMOVE'){
+               await this.$store.dispatch('unregisterVolunteerFromEvent', { 
+                    userId, eventId: this.$route.params.id 
+                });
+                this.$emit('reload');
+            }
         }
     }
 }
@@ -134,7 +144,7 @@ export default {
     }
 
     .assign {
-        width: 10%;
+        width: 12%;
         img {
             width: 0.8vw;
         }

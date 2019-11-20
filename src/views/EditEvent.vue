@@ -271,7 +271,7 @@
                 </section>
             </div>
             <div v-if="tab === 2 && backupVolunteers.length > 0 && assignedVolunteers.length > 0">
-                <ManageVolunteers :event="event" :assignedVolunteers="assignedVolunteers" :backupVolunteers="backupVolunteers" />
+                <ManageVolunteers @reload="setComponenetData" :event="event" :assignedVolunteers="assignedVolunteers" :backupVolunteers="backupVolunteers" />
             </div>
         </div>
     </div>

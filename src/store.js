@@ -95,6 +95,11 @@ export default new Vuex.Store({
     //   const res = await adminService.fetchAdmins();
     //   return util.resHandler(res);
     // },
+    async unregisterVolunteerFromEvent(context, {eventId, userId}){
+      const token = context.getters.user.token;
+      const res = await eventsService.unregisterVolunteerFromEvent(token, eventId, userId);
+      return res;
+    },
     async fetchEvents(){
       const res = await eventsService.fetchEvents();
       return util.resHandler(res);

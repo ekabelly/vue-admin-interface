@@ -30,8 +30,12 @@ export default {
             required: true
         }
     },
-    mounted(){
-        this.attachEventListeners();
+    watch: {
+        isOpen(val){
+            if(val){
+                this.attachEventListeners();
+            }
+        }
     },
     methods: {
         detachEventListeners() {
@@ -45,7 +49,7 @@ export default {
                 .addEventListener('click', this.closeIfClickOutside);
         },
         closeIfClickOutside(event) {
-            console.log({ parentSelector: this.parentCssSelector });
+            // console.log({ parentSelector: this.parentCssSelector });
             const ancestorHasClass = this.ancestorHasClass(
                 this.parentCssSelector,
                 event.target
@@ -72,19 +76,25 @@ export default {
 </script>
 
  <style lang="scss" scoped>
+@import '@/assets/scss/style.scss';
+
     .dropdown {
         position: relative;
-        width: 100%;
+        z-index: 1;
     }
 
     .options {
-        position: absolute;
-        left: 0;
-        right: 0;
+        position: fixed;
         background-color: #fff;
     }
     
     .option {
-        
+        padding: 5px;
+        &:not(:last-child){
+            border-bottom: 1px solid $border-color;
+        }
+        &:hover {
+            background-color: $app-blue;
+        }
     }
  </style>
