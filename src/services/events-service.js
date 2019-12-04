@@ -17,5 +17,7 @@ export default {
     fetchEvents: () => axios.get(`${appApi.serverUrl}/api/events`),
     fetchEvent: eventId => axios.get(`${appApi.serverUrl}/api/events/event/${eventId}`),
     unregisterVolunteerFromEvent: (token, eventId, userId) =>
-        axios.get(`${appApi.serverUrl}/api/events/event-unregister/${userId}/${eventId}`,  adminHeaders(token))
+      axios.get(`${appApi.serverUrl}/api/events/event-unregister/${userId}/${eventId}`,  adminHeaders(token)),
+    registerVolunteerToEvent: (token, eventId, userId) =>
+      axios.get(`${appApi.serverUrl}/api/events/event-register/${userId}/${eventId}`, adminHeaders(token))
 }

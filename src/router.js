@@ -51,6 +51,11 @@ export default new Router({
           path:'/edit-feed/:messageKey',
           name:'edit-feed',
           component: () => import(/* webpackChunkName: 'main' */ './views/NewFeed.vue')
+        },
+        {
+          path: '/dev',
+          name: 'dev',
+          component: () => import(/* webpackChunkName: 'main' */ './views/DevArea.vue')
         }
 
       ]

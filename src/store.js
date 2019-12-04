@@ -100,6 +100,11 @@ export default new Vuex.Store({
       const res = await eventsService.unregisterVolunteerFromEvent(token, eventId, userId);
       return res;
     },
+    async registerVolunteerToEvent(context, {eventId, userId}){
+      const token = context.getters.user.token;
+      const res = await eventsService.registerVolunteerToEvent(token, eventId, userId);
+      return res;
+    },
     async fetchEvents(){
       const res = await eventsService.fetchEvents();
       return util.resHandler(res);

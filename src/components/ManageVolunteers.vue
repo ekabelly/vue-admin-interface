@@ -18,11 +18,11 @@
                     </div>
                     <div class="dropdown">
                         <Dropdown 
-                            @optionSelected="handleDropdownClick($event, volunteer.user_id)"
-                            @close="handleDropdownClick(null, null)"
+                            @optionSelected="onAssignedVolunteersDropdown($event, volunteer.user_id)"
+                            @close="onAssignedVolunteersDropdown(null, null)"
                             :isOpen="isDropdownOpen === volunteer.user_id" 
                             value="standBy" 
-                            :options="dropdownOptions"
+                            :options="assignedVolunteersDropDown"
                             :parent-css-selector="`dropdown-${volunteer.user_id}`"
                         />
                     </div>
@@ -36,7 +36,7 @@
               </div>
           </div>
       </section>
-      <!-- <section class="section">
+      <section class="section">
           <div class="section-title">
               צוות
           </div>
@@ -45,17 +45,23 @@
                 <div class="user-name">
                   {{ `${volunteer.user_name} ${volunteer.user_last_name}` }}
                 </div>
-                <div @click="toggleDropDown(volunteer.user_id)" class="assign flex align-center space-around">
-                    <div>
-                        סטנד ביי
+                <div @click="toggleDropDown(volunteer.user_id)" class="assign pointer" :class="{[`dropdown-${volunteer.user_id}`]: true}">
+                    <div class="flex align-center space-between">
+                        <div>
+                            גיבוי
+                        </div>
+                        <img src="@/assets/img/arrow-down.png" alt="">
+                    </div>
+                    <div class="dropdown">
                         <Dropdown 
-                            @optionSelected="handleDropdownClick($event, volunteer.user_id)" 
+                            @optionSelected="onBackupVolunteersDropdown($event, volunteer.user_id)"
+                            @close="onBackupVolunteersDropdown(null, null)"
                             :isOpen="isDropdownOpen === volunteer.user_id" 
                             value="standBy" 
-                            :options="dropdownOptions" 
+                            :options="backupVolunteersDropDown"
+                            :parent-css-selector="`dropdown-${volunteer.user_id}`"
                         />
                     </div>
-                    <img src="@/assets/img/arrow-down.png" alt="">
                 </div>
                 <div class="phone">
                     {{ volunteer.phone }}
@@ -65,9 +71,7 @@
                 </div>
               </div>
           </div>
-      </section> -->
-
-      
+      </section>
   </div>
 </template>
 
@@ -96,7 +100,8 @@ export default {
     data(){
         return {
             isDropdownOpen: null,
-            dropdownOptions: [{ value:'backup', display:'סטנד בי' }, {value:'REMOVE', display:'הסר מההתנדבות'}]
+            assignedVolunteersDropDown: [{ value:'backup', display:'סטנד בי' }, {value:'REMOVE', display:'הסר מההתנדבות'}],
+            backupVolunteersDropDown: [{ value:'assign', display:'צוות' }, {value:'REMOVE', display:'הסר מההתנדבות'}]
         }
     },
     methods: {
@@ -107,11 +112,21 @@ export default {
                 this.isDropdownOpen = volunteerId;
             }
         },
-        async handleDropdownClick(selectedValue, userId){
+        async onAssignedVolunteersDropdown(selectedValue, userId){
             // console.log({ selectedValue, volunteerId });
             this.isDropdownOpen = null;
             if(selectedValue === 'REMOVE'){
                await this.$store.dispatch('unregisterVolunteerFromEvent', { 
+                    userId, eventId: this.$route.params.id 
+                });
+                this.$emit('reload');
+            }
+        },
+        async onBackupVolunteersDropdown(selectedValue, userId){
+            // console.log({ selectedValue, volunteerId });
+            this.isDropdownOpen = null;
+            if(selectedValue === 'REMOVE'){
+               await this.$store.dispatch('registerVolunteerToEvent', { 
                     userId, eventId: this.$route.params.id 
                 });
                 this.$emit('reload');
