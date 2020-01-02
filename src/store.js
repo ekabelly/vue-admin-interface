@@ -1,41 +1,14 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
-import moment from 'moment';
 import firebase from 'firebase';
-import VuexPersistence from 'vuex-persist';
-import sessionConfig from './config/session.config';
 import eventsService from './services/events-service';
 import messagesService from './services/messages-service';
 import util from './util/util';
 import adminService from './services/admin-service';
 import appGeneralServices from './services/app-general-services';
+import vuexCookie from './config/vuex-cookie';
 
 Vue.use(Vuex);
-
-
-const vuexCookie = new VuexPersistence({
-  restoreState: key => {
-    let localStorageData = JSON.parse(window.localStorage.getItem(key));
-    if (localStorageData) {
-      let stateExpirationTime = moment(localStorageData.stateSaveTime).add(
-        sessionConfig.STATE_STORAGE_SAVE_DURATION_IN_MINUTES,
-        'minutes'
-      );
-      if (moment(new Date()).isBefore(stateExpirationTime)) {
-        return localStorageData;
-      } else {
-        localStorage.removeItem(key);
-        return null;
-      }
-    } else {
-      return null;
-    }
-  },
-  saveState: (key, state) => {
-    state.stateSaveTime = moment(new Date());
-    window.localStorage.setItem(key, JSON.stringify(state));
-  }
-});
 
 export default new Vuex.Store({
   state: {
@@ -100,9 +73,24 @@ export default new Vuex.Store({
       const res = await eventsService.unregisterVolunteerFromEvent(token, eventId, userId);
       return res;
     },
+    async unregisterVolunteerFromEventBackup(context, {eventId, userId}){
+      const token = context.getters.user.token;
+      const res = await eventsService.unregisterVolunteerFromEventBackup(token, eventId, userId);
+      return res;
+    },
     async registerVolunteerToEvent(context, {eventId, userId}){
       const token = context.getters.user.token;
       const res = await eventsService.registerVolunteerToEvent(token, eventId, userId);
+      return res;
+    },
+    async assignVolunteerToBackupFromRegistered(context, {eventId, userId}){
+      const token = context.getters.user.token;
+      const res = await eventsService.assignVolunteerToBackupFromRegistered(token, eventId, userId);
+      return res;
+    },
+    async assignBackupVolunteerToEvent(context, {eventId, userId}){
+      const token = context.getters.user.token;
+      const res = await eventsService.assignBackupVolunteerToEvent(token, eventId, userId);
       return res;
     },
     async fetchEvents(){
@@ -147,6 +135,10 @@ export default new Vuex.Store({
     },
     async addTag(context, tag){
       const res = await eventsService.addTag({translation: tag});
+      return util.resHandler(res);
+    },
+    async deleteTag(context, tagId){
+      const res = await eventsService.deleteTag(tagId);
       return util.resHandler(res);
     }
   },
