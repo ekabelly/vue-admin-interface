@@ -1,6 +1,14 @@
 import appConstants from '../config/constants';
 
+const adminHeaders = token =>({
+    headers: {
+      'Content-Type': 'application/json',
+      'x-access-token': token
+    }
+});
+
 export default {
+    adminHeaders,
     resHandler: res => {
         // console.log({res});
         if(res && res.data && (res === true || res.status === appConstants.successStatus || Object.values(res).length > 0)){

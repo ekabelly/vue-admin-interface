@@ -35,7 +35,7 @@
       </div>
     </section>
     <section class="section">
-      <div class="section-title">צוות</div>
+      <div class="section-title">גיבוי</div>
       <div class="staff-table">
         <div
           v-for="volunteer of backupVolunteers"
@@ -58,7 +58,7 @@
                 @close="onBackupVolunteersDropdown(null, null)"
                 :isOpen="isDropdownOpen === volunteer.user_id"
                 value="standBy"
-                :options="backupVolunteersDropDown"
+                :options="handleBackupVolunteersDropDown()"
                 :parent-css-selector="`dropdown-${volunteer.user_id}`"
               />
             </div>
@@ -96,11 +96,17 @@ export default {
     data(){
         return {
             isDropdownOpen: null,
-            assignedVolunteersDropDown: [{ value:'BACKUP', display:'סטנד בי' }, {value:'REMOVE', display:'הסר מההתנדבות'}],
+            assignedVolunteersDropDown: [{ value:'BACKUP', display:'גיבוי' }, {value:'REMOVE', display:'הסר מההתנדבות'}],
             backupVolunteersDropDown: [{ value:'ASSIGN', display:'צוות' }, {value:'REMOVE', display:'הסר מההתנדבות'}]
         }
     },
     methods: {
+      handleBackupVolunteersDropDown(){
+        if(this.assignedVolunteers && this.event.volunteers.max === this.assignedVolunteers.length){
+          return [{value:'REMOVE', display:'הסר מההתנדבות'}]
+        }
+        return this.backupVolunteersDropDown;
+      },
         toggleDropDown(volunteerId){
             if(volunteerId === this.isDropdownOpen){
                 this.isDropdownOpen = null;
@@ -113,10 +119,10 @@ export default {
             this.isDropdownOpen = null;
             if(selectedValue === 'REMOVE'){
                await this.$store.dispatch('unregisterVolunteerFromEvent', data);
-                this.$emit('reload');
+               this.reload();
             } else if (selectedValue === 'BACKUP'){
                 await this.$store.dispatch('assignVolunteerToBackupFromRegistered', data);
-                this.$emit('reload');
+                this.reload();
             }
         },
         async onBackupVolunteersDropdown(selectedValue, userId){
@@ -124,11 +130,14 @@ export default {
             this.isDropdownOpen = null;
             if(selectedValue === 'REMOVE'){
                 await this.$store.dispatch('unregisterVolunteerFromEventBackup', data);
-                this.$emit('reload');
+                this.reload();
             } else if(selectedValue === 'ASSIGN'){
                 await this.$store.dispatch('assignBackupVolunteerToEvent', data);
-                this.$emit('reload');
+                this.reload();
             }
+        },
+        reload(){
+          this.$emit('reload', true);
         }
     }
 }

@@ -102,11 +102,11 @@ export default new Vuex.Store({
       return util.resHandler(res);
     },
     async createEvent(context, event){
-      const res = await eventsService.createEvent(event);
+      const res = await eventsService.createEvent(context.getters.user.token, event);
       return util.resHandler(res);
     },
     async updateEvent(context, {eventKey, event}){
-      const res = await eventsService.updateEvent(event, eventKey);
+      const res = await eventsService.updateEvent(context.getters.user.token, event, eventKey);
       return util.resHandler(res);
     },
     async fetchMessages(){
@@ -118,27 +118,27 @@ export default new Vuex.Store({
       return util.resHandler(res);
     },
     async submitMessage(context, message){
-      const res = await messagesService.submitMessage(message);
+      const res = await messagesService.submitMessage(context.getters.user.token, message);
       return util.resHandler(res);
     },
     async updateMessage(context, { message, messageKey }){
-      const res = await messagesService.updateMessage(message, messageKey);
+      const res = await messagesService.updateMessage(context.getters.user.token, message, messageKey);
       return util.resHandler(res);
     },
     async deleteMessage(context, messageKey){
-      const res = await messagesService.deleteMessage(messageKey);
+      const res = await messagesService.deleteMessage(context.getters.user.token, messageKey);
       return util.resHandler(res);
     },
-    async fetchConfig(){
-      const res = await eventsService.fetchConfig();
+    async fetchConfig(context){
+      const res = await eventsService.fetchConfig(context.getters.user.token);
       return util.resHandler(res);
     },
     async addTag(context, tag){
-      const res = await eventsService.addTag({translation: tag});
+      const res = await eventsService.addTag(context.getters.user.token, {translation: tag});
       return util.resHandler(res);
     },
     async deleteTag(context, tagId){
-      const res = await eventsService.deleteTag(tagId);
+      const res = await eventsService.deleteTag(context.getters.user.token, tagId);
       return util.resHandler(res);
     }
   },

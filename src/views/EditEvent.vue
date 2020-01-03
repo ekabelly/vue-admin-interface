@@ -261,7 +261,7 @@
         </div>
         <div v-if="tab === 2 && (backupVolunteers.length > 0 || assignedVolunteers.length > 0)">
           <ManageVolunteers
-            @reload="setComponenetData"
+            @reload="setComponenetData($event)"
             :event="event"
             :assignedVolunteers="assignedVolunteers"
             :backupVolunteers="backupVolunteers"
@@ -270,7 +270,7 @@
       </div>
     </div>
     <div v-else class="flex justify-center align-center">
-        <div class="medium-spinner"></div>
+      <div class="medium-spinner"></div>
     </div>
   </div>
 </template>
@@ -325,7 +325,12 @@ export default {
         this.setComponenetData();
     },
     methods: {
-        async setComponenetData(){
+        async setComponenetData(shouldResetVolunteers){
+          if(shouldResetVolunteers) {
+            this.backupVolunteers = [];
+            this.assignedVolunteers = [];
+
+          }
             this.isData = false;
             this.eventKey = this.$route.params.id;
             let eventPromise;
@@ -339,7 +344,7 @@ export default {
             this.event = this.initMissingFields(this.event);
             this.isData = true;
             this.handleEventVolunteers(this.event);
-            console.log({ config: this.config, event: this.event });
+            // console.log({ config: this.config, event: this.event });
         },
         initMissingFields(event){
             const mandatoryFields = {'vehicles': [], 'tags': [], 'backupVolunteers': {}, 'assignedVolunteers': {}};
@@ -408,7 +413,7 @@ export default {
             if(this.eventKey){
                 res = await this.$store.dispatch('updateEvent', { event: this.event, eventKey: this.eventKey });
             } else {
-                res = await this.$store.dispatch('createEvent',this.event);
+                res = await this.$store.dispatch('createEvent', this.event);
             }
             console.log( res );
             this.$refs.asyncBtn.toggleSpinner(false);
