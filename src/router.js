@@ -24,7 +24,12 @@ export default new Router({
         },
         {
           path:'/events',
-          name:'events-table',
+          name:'events',
+          component: () => import(/* webpackChunkName: 'main' */ './views/EventsTable.vue')
+        },
+        {
+          path:'/finished-events',
+          name:'finished-events',
           component: () => import(/* webpackChunkName: 'main' */ './views/EventsTable.vue')
         },
         {

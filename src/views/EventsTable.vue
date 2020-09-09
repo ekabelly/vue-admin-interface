@@ -19,7 +19,7 @@
             </div>
         </div>
         <div class="table-body" v-if="isData">
-            <div class="event-table-row flex" v-for="event of filteredEventsArr" :key="event.key" @click="navigateToEvent(event.key)">
+            <div class="event-table-row flex" v-for="event of $options.filters.isFinishedEvents(rearrangedEventsArr, $route)" :key="event.key" @click="navigateToEvent(event.key)">
                 <div class="event-table-cell event-status">
                     <img class="volunteer-status-icon" :src="handleStatusIcon(event)" />
                     <span>{{ handleVolunteersStatus(event) }}</span>
@@ -55,7 +55,7 @@ export default {
             eventConfig,
             eventsObj: {},
             eventsArr: [],
-            filteredEventsArr: [],
+            rearrangedEventsArr: [],
             isData: false,
             dateSortDir: false
         }
@@ -63,35 +63,49 @@ export default {
     created(){
         this.fetchInitialData();
     },
+    filters: {
+        isFinishedEvents(events, $route){
+            return events.filter(event => 
+                $route.name === 'finished-events' ? !!event.finishedVolunteers : !event.finishedVolunteers);
+        }
+    },
     methods: {
         async fetchInitialData(){
             const data = await this.$store.dispatch('fetchEvents');
             if(data){
                 this.eventsObj = data;
                 // transform the obj to arr, add to every itiration its key and sort if bt date.
-                this.eventsArr = Object.keys(data).map(eventKey => 
-                    ({...data[eventKey], key: eventKey}));
-                this.filteredEventsArr = [...this.eventsArr];
+                this.eventsArr = Object.keys(data)
+                .map(eventKey => ({...data[eventKey], key: eventKey}));
+                this.rearrangedEventsArr = [...this.eventsArr];
                 this.isData = true;
             }
         },
         handleStatusIcon(event){
             let imgName = 'x-red';
-            if(this.handleVolunteersStatus(event) === eventConfig.full){
+            if(this.handleVolunteersStatus(event) === eventConfig.full || this.handleVolunteersStatus(event) === eventConfig.finished){
                 imgName = 'check-green';
             }
             return require(`@/assets/img/${imgName}.png`);
         },
         handleVolunteersStatus(event){
-            if(event.personal){
-                if( event.personal.length >= event.volunteers.max){
+            if(event.finishedVolunteers) {
+                const finishedVolunteers = Object.values(event.finishedVolunteers);
+                if(finishedVolunteers.length > 0){
+                    return eventConfig.finished;
+                }
+            }
+            if(event.assignedVolunteers){
+                const assignedVolunteers = Object.values(event.assignedVolunteers);
+                if( assignedVolunteers.length === event.volunteers.max){
                     return eventConfig.full;
                 }
                 if(event.length === 0){
                     return eventConfig.notFull;
                 }
+                const volunteersHebWord = assignedVolunteers.length > 1 ? 'התנדבו' : 'התנדב'
                 // if there are personal but not full or empty,
-                return `התנדבו ${event.personal.length}, חסרים ${event.volunteers.max - event.personal.length}`
+                return `${volunteersHebWord} ${assignedVolunteers.length}, אפשר עוד ${event.volunteers.max - assignedVolunteers.length}`
             }
             // if event.personal doesn't exists or is empty, return not full
             return eventConfig.notFull;
@@ -102,10 +116,10 @@ export default {
         sortByDate(){
             if(this.dateSortDir){
                 this.dateSortDir = false;
-                return this.filteredEventsArr.sort((a, b) => new Date(a.time.date) - new Date(b.time.date));
+                return this.rearrangedEventsArr.sort((a, b) => new Date(a.time.date) - new Date(b.time.date));
             }
             this.dateSortDir = true;
-            return this.filteredEventsArr.sort((a, b) => new Date(b.time.date) - new Date(a.time.date));
+            return this.rearrangedEventsArr.sort((a, b) => new Date(b.time.date) - new Date(a.time.date));
         },
         handleEventName(eventName){
             // this size has been tested and checked to be the best.
@@ -124,10 +138,10 @@ export default {
         },
         search(text){
             if(!text || text === ''){
-                this.filteredEventsArr = [...this.eventsArr];
+                this.rearrangedEventsArr = [...this.eventsArr];
                 return;
             }
-            this.filteredEventsArr = this.filteredEventsArr.filter(event => {
+            this.rearrangedEventsArr = this.rearrangedEventsArr.filter(event => {
                 const titleFlag = event.title.includes(text); 
                 let locationsFlag = false;
                 for (const location of event.locations) {

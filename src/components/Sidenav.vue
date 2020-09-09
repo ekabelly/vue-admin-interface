@@ -3,25 +3,17 @@
         <div @click="$router.push('/events')" class="logo border-bottom pointer">
             <img src="@/assets/img/logo.png" alt="">
         </div>
-        <router-link to="/event">
-            <div class="create-new-event side-nav-btn border-bottom flex align-center justify-center">
-                יצירת אירוע חדש
-            </div>
+        <router-link to="/event" class="create-new-event side-nav-btn border-bottom flex align-center justify-center">
+            יצירת אירוע חדש
         </router-link>
-        <div class="disabled side-nav-btn border-bottom flex align-center justify-center">
-            <div>
-                אירועים פעילים
-            </div>
-        </div>
-        <div class="disabled side-nav-btn border-bottom flex align-center justify-center">
-            <div>
-                ארכיון אירועים
-            </div>
-        </div>
-        <router-link to="/new-feed">
-            <div class="side-nav-btn border-bottom flex align-center justify-center">
-                יצירת הודעה חדש
-            </div>
+        <router-link to="/events" class="side-nav-btn border-bottom flex align-center justify-center">
+            אירועים פעילים
+        </router-link>
+        <router-link to="/finished-events" class="side-nav-btn border-bottom flex align-center justify-center">
+            ארכיון אירועים
+        </router-link>
+        <router-link to="/new-feed" class="side-nav-btn border-bottom flex align-center justify-center">
+            יצירת הודעה חדש
         </router-link>
     </div>
 </template>
@@ -62,10 +54,10 @@ $navbar-height: 55px;
             color: $border-color;
             cursor: default;
         }
-    }
 
-    .create-new-event {
-        color: #fff;
-        background-color: $app-blue;
+        &.router-link-exact-active {
+            background-color: $app-blue;
+            color: #fff;
+        }
     }
 </style>
