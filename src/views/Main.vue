@@ -14,9 +14,6 @@
                 <div class="btn volunteers-btn disabled">
                    מתנדבים
                 </div>
-                <!-- <div class="btn general-messages">
-                    הודעות כלליות
-                </div> -->
                 <router-link class="btn general-messages" to="/news-feed">
                      הודעות כלליות
                 </router-link>

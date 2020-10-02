@@ -2,6 +2,9 @@
     <div class="events-table">
         <div class="table-head flex space-evenly">
             <div class="table-title last-table-title event-table-cell">
+                מזהה אירוע
+            </div>
+            <div class="table-title event-table-cell">
                 סטטוס
             </div>
             <div class="table-title event-table-cell">
@@ -19,10 +22,24 @@
             </div>
         </div>
         <div class="table-body" v-if="isData">
-            <div class="event-table-row flex" v-for="event of $options.filters.isFinishedEvents(rearrangedEventsArr, $route)" :key="event.key" @click="navigateToEvent(event.key)">
+            <div 
+                class="event-table-row flex" 
+                v-for="event of $options.filters.isFinishedEvents(rearrangedEventsArr, $route)" :key="event.key" 
+                @click="navigateToEvent(event.key)"
+            >
+                <div class="event-table-cell">
+                    <span :id="event.key">
+                        {{ event.key }}
+                    </span>
+                    <button @click="addEventKeyToClipboard($event, event.key)">
+                        העתק
+                    </button>
+                </div>
                 <div class="event-table-cell event-status">
                     <img class="volunteer-status-icon" :src="handleStatusIcon(event)" />
-                    <span>{{ handleVolunteersStatus(event) }}</span>
+                    <span>
+                        {{ handleVolunteersStatus(event) }}
+                    </span>
                     <!-- <img class="arrow-down" src="../assets/img/arrow-down.png" alt=""> -->
                 </div>
                 <div class="event-table-cell">
@@ -153,6 +170,19 @@ export default {
             })
             console.log(text);
             
+        },
+        addEventKeyToClipboard(clickEvent, volunteerEventKey){
+            clickEvent.stopPropagation();
+            clickEvent.preventDefault();
+            this.updateClipboard(volunteerEventKey);
+    
+        },
+        updateClipboard(text) {
+            navigator.clipboard.writeText(text).then(() => {
+                alert('העתקת בהצלחה את מזהה האירוע: ' + text);
+            }, () => {
+                alert('העתקת מזהה האירוע: ' + text + ' נכשלה.');
+            });
         }
     }
 }
@@ -218,13 +248,6 @@ $table-mragin: 20px;
             align-items: center;
             justify-content: flex-start;
             flex-direction: row;
-            // background-color: yellow;
-            // &.empty {
-            // background-color: red;
-            // }
-            // &.full {
-            // background-color: green;
-            // }
         }
     }
     
@@ -236,7 +259,6 @@ $table-mragin: 20px;
         transition: box-shadow .3s;
 
         &:hover {
-            // box-shadow: 0 0 11px rgba(33,33,33,.4);
             box-shadow: 0px 0 7px 0 rgba(0, 0, 0, 0.17); 
         }
     }
@@ -253,9 +275,6 @@ $table-mragin: 20px;
         justify-content: flex-start;
 
         img {
-            // height: 4px;
-            // margin-right: 3px;
-            // width: 7.5px;
             transition: transform .3s;
             &.down {
                 transform: rotate(180deg);

@@ -45,7 +45,7 @@
                   :class="{ active: event.volunteersTypes && event.volunteersTypes.includes(11) }"
                 >
                   <div class="check">V</div>
-                </div>פעילים
+                </div>צעיר
               </div>
               <div class="option flex align-center" @click="toggleVolunteeringType(13)">
                 <div
@@ -53,7 +53,7 @@
                   :class="{ active: event.volunteersTypes && event.volunteersTypes.includes(13) }"
                 >
                   <div class="check">V</div>
-                </div>פעילים פלוס
+                </div>ותיק
               </div>
             </div>
             <div class="volunteers-numbers margin-top flex">
