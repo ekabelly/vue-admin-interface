@@ -21,7 +21,7 @@ export default {
     "urgent" : false,
     "vehicles" : [ ],
     "volunteers" : {
-      "max" : 10,
+      "max" : 1,
       "min" : 1
     },
     "volunteersTypes" : [ 11, 12, 13 ]

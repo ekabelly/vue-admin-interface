@@ -58,13 +58,16 @@ export default {
     },
     methods: {
         async fetchInitialData(){
-            const data = await this.$store.dispatch('fetchMessages');
-            if(data){
+            let res = await this.$store.dispatch('fetchMessages');
+            if(res){
+                if('data' in res && res.data === null) {
+                    res = {};
+                }
                 this.loadingBtnKey = null;
-                this.messagesObj = data;
-                // retanfost the obj to arr, add to every itiration its key and sort if bt date.
-                this.messagesArr = this.sortByDate(Object.keys(data).map(messagesKey => 
-                    ({...data[messagesKey], key: messagesKey})));
+                this.messagesObj = res;
+                // transform the obj to arr, add to every itiration its key and sort if by date.
+                this.messagesArr = this.sortByDate(Object.keys(res).map(messagesKey => 
+                    ({...res[messagesKey], key: messagesKey})));
                 this.filteredMessagewsArr = [...this.messagesArr];
                 this.isData = true;
             }
@@ -102,9 +105,12 @@ export default {
         },
         async deleteMessage(messageKey){
             this.loadingBtnKey = messageKey;
-            const res = await this.$store.dispatch('deleteMessage', messageKey);
-            if(res){
-                this.fetchInitialData();
+            const isUserSure = confirm('למחוק הודעה?');
+            if(isUserSure) {
+                const res = await this.$store.dispatch('deleteMessage', messageKey);
+                if(res){
+                    this.fetchInitialData();
+                }
             }
         }
     }

@@ -163,7 +163,9 @@
                       />
                     </div>
                     <div class="form-group flex">
-                      <label :for="'street' + index">רחוב</label>
+                      <label :for="'street' + index">
+                        רחוב (לא חובה)
+                      </label>
                       <input
                         @blur="updateLocations($event, 'street', index)"
                         :id="'street' + index"
@@ -182,14 +184,26 @@
                       />
                     </div>
                   </div>
-                  <div class="form-group flex location-desc">
-                    <label :for="'desc' + index">תיאור כתובת {{ index === 0 ? 'מוצא' : '' }}</label>
-                    <input
-                      @blur="updateLocations($event, 'desc', index)"
-                      :id="'desc' + index"
-                      type="text"
-                      :value="location.desc"
-                    />
+                  <div class="flex">
+                    <div class="form-group flex">
+                        <label :for="'floor' + index">קומה (לא חובה)</label>
+                        <input
+                          @blur="updateLocations($event, 'floor', index)"
+                          class="floor"
+                          :id="'floor' + index"
+                          type="number"
+                          :value="location.floor"
+                        />
+                    </div>
+                    <div class="form-group flex location-desc">
+                      <label :for="'desc' + index">תיאור כתובת {{ index === 0 ? 'מוצא' : '' }}</label>
+                      <input
+                        @blur="updateLocations($event, 'desc', index)"
+                        :id="'desc' + index"
+                        type="text"
+                        :value="location.desc"
+                      />
+                    </div>
                   </div>
                 </div>
               </div>
@@ -227,7 +241,7 @@
                     :key="key"
                     :class="{ selected: event.tags && event.tags.includes(key) }"
                   >
-                    <!-- <div @click="deleteTag(key)" class="x flex justify-center align-center">x</div> -->
+                    <div @click="deleteTag(key)" class="x flex justify-center align-center">x</div>
                     <div
                       @click="toggleVehicleOrTags('tags', key)"
                       class="text"
@@ -404,7 +418,6 @@ export default {
             return true;
         },
         async handleSubmit(){
-            // console.log('submit');
             if(!this.validFormNotifyUser()){
                 return;
             }
@@ -472,18 +485,20 @@ export default {
         async addTag(){
             this.$refs.addTag.toggleSpinner(true);
             if(this.newTag && this.newTag.length && this.newTag.length > 0){
-                await this.$store.dispatch('addTag', this.newTag);
-                this.newTag = '';
-                this.config = await this.$store.dispatch('fetchConfig');
+              await this.$store.dispatch('addTag', this.newTag);
+              this.newTag = '';
+              this.config = await this.$store.dispatch('fetchConfig');
             }
             this.$refs.addTag.toggleSpinner(false);
         },
-        // async deleteTag(tagId){
-        //     this.$refs.addTag.toggleSpinner(true);
-        //     await this.$store.dispatch('deleteTag', tagId);
-        //     this.config = await this.$store.dispatch('fetchConfig');
-        //     this.$refs.addTag.toggleSpinner(false);
-        // }
+        async deleteTag(tagId){
+          if(confirm('למחוק תגית?')){
+            this.$refs.addTag.toggleSpinner(true);
+            await this.$store.dispatch('deleteTag', tagId);
+            this.config = await this.$store.dispatch('fetchConfig');
+            this.$refs.addTag.toggleSpinner(false);
+          }
+        }
     }
 }
 </script>
