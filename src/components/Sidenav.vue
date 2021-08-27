@@ -13,7 +13,7 @@
             ארכיון אירועים
         </router-link>
         <router-link to="/new-feed" class="side-nav-btn border-bottom flex align-center justify-center">
-            יצירת הודעה חדש
+            יצירת הודעה חדשה
         </router-link>
     </div>
 </template>
